@@ -46,5 +46,21 @@ def capturar_y_leer_oro():
     else:
         print("[✘] No se detectó ningún número.")
 
+
+def detectar_oro():
+    """Captura la zona de oro y devuelve el valor detectado.
+
+    Esta función actúa como un pequeño wrapper para ``capturar_y_leer_oro`` pero
+    retornando únicamente el número obtenido en lugar de imprimirlo por
+    pantalla.
+    """
+    x, y, w, h = 1205, 580, 80, 40  # Coordenadas ajustables
+    captura = pyautogui.screenshot(region=(x, y, w, h))
+    ruta_imagen = "frame_oro.png"
+    captura.save(ruta_imagen)
+
+    texto = leer_oro_desde_imagen(ruta_imagen)
+    return int(texto) if texto.isdigit() else None
+
 if __name__ == "__main__":
     capturar_y_leer_oro()
