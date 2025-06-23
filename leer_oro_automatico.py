@@ -1,6 +1,6 @@
 """Lectura automática del oro usando un detector de objetos."""
 
-import pyautogui
+import io_backend
 import pytesseract
 from PIL import Image
 import cv2
@@ -49,7 +49,7 @@ def _ensure_detector():
 def capturar_y_leer_oro():
     """Captura la pantalla completa y detecta la región del oro."""
     _ensure_detector()
-    captura = pyautogui.screenshot()
+    captura = io_backend.screenshot()
     resultados = detect(_detector, captura, 0.4)
     bbox = next((b for l, b, s in resultados if l == "oro"), None)
 
