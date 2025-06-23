@@ -4,19 +4,7 @@ from preparar_datos import heroes_id
 from config import SINERGIAS_FIJAS
 from collections import Counter
 from sinergias import datos_heroes
-from PIL import ImageStat
-import pyautogui
-
-SHOP_BUTTON_REGION = (620, 640, 80, 80)
-
-
-def tienda_presente():
-    try:
-        captura = pyautogui.screenshot(region=SHOP_BUTTON_REGION)
-        brillo = ImageStat.Stat(captura.convert("L")).mean[0]
-        return brillo > 30
-    except Exception:
-        return False
+from tienda_utils import tienda_presente
 
 # Red neuronal igual a la del entrenamiento
 modelo = nn.Sequential(
