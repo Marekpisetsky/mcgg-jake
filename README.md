@@ -163,6 +163,13 @@ Con el tiempo, la IA **maximiza su recompensa**.
 - `torch` (en fase de entrenamiento)
 - Instala todas estas dependencias con `pip install -r requirements.txt`
 
+## Modo móvil
+
+- Instala `scrcpy` o abre un emulador de Android.
+- Ejecuta `adb start-server` y luego `adb devices` para verificar la conexión.
+- Si se detecta tu dispositivo, ejecuta `scrcpy` para ver la pantalla en tiempo real.
+- Si `adb devices` no muestra tu móvil, revisa los drivers USB y activa la depuración USB.
+
 ---
 
 ## 📜 LICENCIA
