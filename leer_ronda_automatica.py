@@ -1,7 +1,15 @@
+"""Lectura de la ronda usando un detector de objetos."""
+
 import cv2
 import pytesseract
 import re
 import pyautogui
+import numpy as np
+
+from detection import load_detector, detect
+
+
+_detector = None
 
 def limpiar_ocr(texto):
     reemplazos = {
@@ -16,15 +24,22 @@ def limpiar_ocr(texto):
 
 
 
-def detectar_ronda():
-    x, y, w, h = 480, 63, 40, 20  # coordenadas pantalla 1366x768
-    screenshot = pyautogui.screenshot(region=(x, y, w, h))
-    screenshot.save("debug_ronda_raw.png")
+def _ensure_detector():
+    global _detector
+    if _detector is None:
+        _detector = load_detector("detector.pth")
 
-    imagen = cv2.imread("debug_ronda_raw.png")
-    if imagen is None:
-        print("⚠️ No se pudo capturar la ronda en pantalla")
+
+def detectar_ronda():
+    _ensure_detector()
+    screenshot = pyautogui.screenshot()
+    resultados = detect(_detector, screenshot, 0.4)
+    bbox = next((b for l, b, s in resultados if l == "ronda"), None)
+    if bbox is None:
+        print("⚠️ No se encontró la región de la ronda")
         return None
+    x1, y1, x2, y2 = map(int, bbox)
+    imagen = cv2.cvtColor(np.array(screenshot.crop((x1, y1, x2, y2))), cv2.COLOR_RGB2BGR)
 
     gris = cv2.cvtColor(imagen, cv2.COLOR_BGR2GRAY)
     binaria = cv2.adaptiveThreshold(gris, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
