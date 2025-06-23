@@ -4,6 +4,10 @@ from leer_ronda_automatica import detectar_ronda as obtener_ronda
 from leer_oro_automatico import detectar_oro
 from detectar_sinergias import detectar_sinergias_activas
 
+# El código original no contemplaba la lectura de la tienda ni el banco.
+# Para evitar errores en módulos que esperan estas claves, se devolverán
+# listas vacías por defecto.
+
 
 def leer_estado_juego():
     """
@@ -32,6 +36,12 @@ def leer_estado_juego():
     except Exception as e:
         estado["oro"] = None
         print(f"[ERROR] No se pudo leer el oro: {e}")
+
+    # Claves opcionales utilizadas por otros módulos.
+    # Se devuelven listas vacías para evitar KeyError si aún no se ha
+    # implementado la detección automática de la tienda o del banco.
+    estado.setdefault("tienda", [])
+    estado.setdefault("banco", [])
 
     return estado
 
