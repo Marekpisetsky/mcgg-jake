@@ -3,10 +3,13 @@ import json
 import argparse
 
 import pyautogui
+from collections import Counter
 
 from leer_estado_juego import leer_estado_juego
 from modelo_ia import decision_ia
 from agent import Agent
+from sinergias import datos_heroes
+from config import SINERGIAS_FIJAS
 
 
 def ejecutar_accion(accion):
@@ -44,17 +47,41 @@ def main(numero_rondas=None, archivo="partida_ia.json"):
     """
     historial = []
     ronda_actual = 0
-    # Agente de aprendizaje por refuerzo
-    agent = Agent(state_size=3, action_size=2)
+    feature_size = 2 + 3 + len(SINERGIAS_FIJAS)
+    # Agente de aprendizaje por refuerzo con vector extendido
+    agent = Agent(state_size=feature_size, action_size=2)
 
     while True:
         estado = leer_estado_juego()
 
-        estado_vector = [
-            estado.get("oro", 0) or 0,
-            estado.get("ronda", 0) or 0,
-            len(estado.get("sinergias", [])),
-        ]
+        def construir_vector(e):
+            oro = e.get("oro", 0) or 0
+            ronda = e.get("ronda", 0) or 0
+            banco = e.get("banco", [])
+
+            # Calcular niveles de estrellas
+            conteo = Counter(banco)
+            estrella1 = estrella2 = estrella3 = 0
+            for cantidad in conteo.values():
+                if cantidad >= 9:
+                    estrella3 += 1
+                elif cantidad >= 3:
+                    estrella2 += 1
+                else:
+                    estrella1 += 1
+
+            estrellas = [estrella1, estrella2, estrella3]
+
+            # Calcular sinergias detalladas
+            sinergias = []
+            for nombre in banco:
+                sinergias += datos_heroes.get(nombre, [])
+            conteo_sin = Counter(sinergias)
+            vector_sinergias = [conteo_sin.get(s, 0) for s in SINERGIAS_FIJAS]
+
+            return [oro, ronda] + estrellas + vector_sinergias
+
+        estado_vector = construir_vector(estado)
 
         accion_idx = agent.select_action(estado_vector)
         acciones = decision_ia(estado) if accion_idx == 1 else []
@@ -66,11 +93,7 @@ def main(numero_rondas=None, archivo="partida_ia.json"):
         estado_resultante = leer_estado_juego()
         recompensa = (estado_resultante.get("oro", 0) or 0) - (estado.get("oro", 0) or 0)
 
-        siguiente_vector = [
-            estado_resultante.get("oro", 0) or 0,
-            estado_resultante.get("ronda", 0) or 0,
-            len(estado_resultante.get("sinergias", [])),
-        ]
+        siguiente_vector = construir_vector(estado_resultante)
 
         agent.update_policy((estado_vector, accion_idx, recompensa, siguiente_vector, False))
 
