@@ -2,6 +2,14 @@
 
 Bienvenido al repositorio oficial de **mcgg-jake**, un proyecto experimental de inteligencia artificial que aprende a jugar **Magic Chess: Go Go** como lo haría un humano: observando, interpretando y tomando decisiones sin reglas preprogramadas.
 
+Antes de ejecutar cualquier script, instala todas las dependencias con:
+
+```bash
+pip install -r requirements.txt
+```
+
+En algunas plataformas `pyautogui` puede requerir paquetes del sistema (por ejemplo `scrot` y `xsel` en Linux).
+
 ---
 
 ## 🧠 ¿CÓMO FUNCIONARÁ LA IA DE MCGG-JAKE?
