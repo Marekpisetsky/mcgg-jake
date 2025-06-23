@@ -6,3 +6,7 @@ SINERGIAS_FIJAS = [
     "Mage", "Elementalist", "Assassin", "Mecha", "Undead",
     "Wrestler", "Elf", "Dragon"
 ]
+
+# Modo de interacción para entrada/salida.
+# "desktop" usa pyautogui local, "mobile" utiliza ADB.
+IO_MODE = "desktop"

@@ -1,7 +1,7 @@
 """Detección de sinergias usando el detector de objetos."""
 
 import cv2
-import pyautogui
+import io_backend
 import json
 import os
 
@@ -31,7 +31,7 @@ def _ensure_detector():
 def detectar_sinergias_activas():
     _ensure_detector()
     etiquetas = cargar_etiquetas()
-    captura = pyautogui.screenshot()
+    captura = io_backend.screenshot()
     resultados = detect(_detector, captura, 0.4)
     activas = []
     for label, box, score in resultados:

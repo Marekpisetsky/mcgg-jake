@@ -3,7 +3,7 @@
 import cv2
 import pytesseract
 import re
-import pyautogui
+import io_backend
 import numpy as np
 
 from detection import load_detector, detect
@@ -32,7 +32,7 @@ def _ensure_detector():
 
 def detectar_ronda():
     _ensure_detector()
-    screenshot = pyautogui.screenshot()
+    screenshot = io_backend.screenshot()
     resultados = detect(_detector, screenshot, 0.4)
     bbox = next((b for l, b, s in resultados if l == "ronda"), None)
     if bbox is None:
