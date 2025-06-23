@@ -1,4 +1,9 @@
-import pyautogui
+import config
+
+if config.IO_MODE == "mobile":
+    import mobile_io as io_backend
+else:
+    import pyautogui as io_backend
 import pytesseract
 from PIL import Image
 import cv2
@@ -35,7 +40,7 @@ def leer_oro_desde_imagen(ruta):
 def capturar_y_leer_oro():
     # Coordenadas del centro del número (ajusta según tu pantalla)
     x, y, w, h = 1205, 580, 80, 40  # <-- Ajusta estos valores
-    captura = pyautogui.screenshot(region=(x, y, w, h))
+    captura = io_backend.screenshot(region=(x, y, w, h))
     ruta_imagen = "frame_oro.png"
     captura.save(ruta_imagen)
     print("[✓] Captura guardada en:", ruta_imagen)
@@ -55,7 +60,7 @@ def detectar_oro():
     pantalla.
     """
     x, y, w, h = 1205, 580, 80, 40  # Coordenadas ajustables
-    captura = pyautogui.screenshot(region=(x, y, w, h))
+    captura = io_backend.screenshot(region=(x, y, w, h))
     ruta_imagen = "frame_oro.png"
     captura.save(ruta_imagen)
 

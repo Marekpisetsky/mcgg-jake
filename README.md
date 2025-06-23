@@ -154,6 +154,15 @@ Con el tiempo, la IA **maximiza su recompensa**.
 
 ---
 
+## 📲 Modo móvil
+
+1. Activa la depuración USB o inicia un emulador de Android.
+2. Verifica la conexión con `adb devices`.
+3. Para ver la partida en tiempo real puedes usar `scrcpy`.
+4. Cambia `IO_MODE` a `"mobile"` en `config.py` para que `main_loop.py` use `adb`.
+
+---
+
 ## 📜 LICENCIA
 
 Este proyecto es de código abierto y experimental, compartido con fines educativos.

@@ -1,7 +1,12 @@
 import cv2
 import pytesseract
 import re
-import pyautogui
+import config
+
+if config.IO_MODE == "mobile":
+    import mobile_io as io_backend
+else:
+    import pyautogui as io_backend
 
 def limpiar_ocr(texto):
     reemplazos = {
@@ -18,7 +23,7 @@ def limpiar_ocr(texto):
 
 def detectar_ronda():
     x, y, w, h = 480, 63, 40, 20  # coordenadas pantalla 1366x768
-    screenshot = pyautogui.screenshot(region=(x, y, w, h))
+    screenshot = io_backend.screenshot(region=(x, y, w, h))
     screenshot.save("debug_ronda_raw.png")
 
     imagen = cv2.imread("debug_ronda_raw.png")
