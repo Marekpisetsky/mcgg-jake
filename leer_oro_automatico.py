@@ -1,9 +1,17 @@
+"""Lectura automática del oro usando un detector de objetos."""
+
 import pyautogui
 import pytesseract
 from PIL import Image
 import cv2
 import numpy as np
-import time
+
+from detection import load_detector, detect
+
+
+_detector = None
+
+
 
 def leer_oro_desde_imagen(ruta):
     import cv2
@@ -32,19 +40,35 @@ def leer_oro_desde_imagen(ruta):
 
 
 
+def _ensure_detector():
+    global _detector
+    if _detector is None:
+        _detector = load_detector("detector.pth")
+
+
 def capturar_y_leer_oro():
-    # Coordenadas del centro del número (ajusta según tu pantalla)
-    x, y, w, h = 1205, 580, 80, 40  # <-- Ajusta estos valores
-    captura = pyautogui.screenshot(region=(x, y, w, h))
+    """Captura la pantalla completa y detecta la región del oro."""
+    _ensure_detector()
+    captura = pyautogui.screenshot()
+    resultados = detect(_detector, captura, 0.4)
+    bbox = next((b for l, b, s in resultados if l == "oro"), None)
+
+    if bbox is None:
+        print("[✘] No se encontró la región de oro")
+        return None
+
+    x1, y1, x2, y2 = map(int, bbox)
+    region = captura.crop((x1, y1, x2, y2))
     ruta_imagen = "frame_oro.png"
-    captura.save(ruta_imagen)
+    region.save(ruta_imagen)
     print("[✓] Captura guardada en:", ruta_imagen)
-    
+
     texto = leer_oro_desde_imagen(ruta_imagen)
     if texto.isdigit():
         print("[✔] Oro detectado:", texto)
-    else:
-        print("[✘] No se detectó ningún número.")
+        return int(texto)
+    print("[✘] No se detectó ningún número.")
+    return None
 
 
 def detectar_oro():
@@ -54,13 +78,8 @@ def detectar_oro():
     retornando únicamente el número obtenido en lugar de imprimirlo por
     pantalla.
     """
-    x, y, w, h = 1205, 580, 80, 40  # Coordenadas ajustables
-    captura = pyautogui.screenshot(region=(x, y, w, h))
-    ruta_imagen = "frame_oro.png"
-    captura.save(ruta_imagen)
-
-    texto = leer_oro_desde_imagen(ruta_imagen)
-    return int(texto) if texto.isdigit() else None
+    valor = capturar_y_leer_oro()
+    return valor
 
 if __name__ == "__main__":
     capturar_y_leer_oro()
