@@ -1,7 +1,12 @@
 import cv2
-import pyautogui
 import json
 import os
+import config
+
+if config.IO_MODE == "mobile":
+    import mobile_io as io_backend
+else:
+    import pyautogui as io_backend
 
 X_BASE = 5
 Y_BASE = 180
@@ -24,7 +29,7 @@ def detectar_sinergias_activas():
         x = X_BASE
         y = Y_BASE + i * ESPACIADO_Y
 
-        captura = pyautogui.screenshot(region=(x, y, ANCHO, ALTO))
+        captura = io_backend.screenshot(region=(x, y, ANCHO, ALTO))
         nombre_debug = f"debug_sinergia_{i}.png"
         captura.save(nombre_debug)
 

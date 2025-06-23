@@ -2,7 +2,12 @@ import time
 import json
 import argparse
 
-import pyautogui
+import config
+
+if config.IO_MODE == "mobile":
+    import mobile_io as io_backend
+else:
+    import pyautogui as io_backend
 
 from leer_estado_juego import leer_estado_juego
 from modelo_ia import decision_ia
@@ -29,7 +34,10 @@ def ejecutar_accion(accion):
             pass
 
     if x is not None and y is not None:
-        pyautogui.click(x, y)
+        if config.IO_MODE == "mobile":
+            io_backend.tap(x, y)
+        else:
+            io_backend.click(x, y)
         print(f"[✓] Click en ({x}, {y})")
     else:
         print(f"[!] Formato de acción no reconocido: {accion}")

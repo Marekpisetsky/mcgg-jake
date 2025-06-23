@@ -6,3 +6,8 @@ SINERGIAS_FIJAS = [
     "Mage", "Elementalist", "Assassin", "Mecha", "Undead",
     "Wrestler", "Elf", "Dragon"
 ]
+
+# Selección del modo de interacción con el juego.
+# "desktop" utiliza pyautogui sobre una ventana (emulador/scrcpy).
+# "mobile" emplea adb para capturas y toques en un dispositivo conectado.
+IO_MODE = "desktop"
