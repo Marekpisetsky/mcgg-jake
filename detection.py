@@ -2,6 +2,11 @@ import json
 import os
 from typing import List, Tuple
 
+import numpy as np
+
+import cv2
+import pytesseract
+
 import torch
 from PIL import Image
 from torchvision import transforms
@@ -25,6 +30,11 @@ LABELS = {1: "oro", 2: "ronda", 3: "tienda", 4: "sinergia"}
 # Add hero labels after the predefined ones
 for i, name in enumerate(HEROES, start=5):
     LABELS[i] = name
+
+# Extra UI elements that can be detected
+EXTRA_LABELS = ["nivel", "cofre", "item", "gogo"]
+for name in EXTRA_LABELS:
+    LABELS[len(LABELS) + 1] = name
 
 _transform = transforms.Compose([
     transforms.ToTensor(),
@@ -106,6 +116,19 @@ def detect(model, image: Image.Image, score_thr: float = 0.5) -> List[Tuple[str,
                 (LABELS[label.item()], box.cpu().numpy().tolist(), score.item())
             )
     return results
+
+
+def detect_level(model, image: Image.Image, score_thr: float = 0.5) -> int | None:
+    """Return the detected player level using OCR on the level region."""
+    results = detect(model, image, score_thr)
+    bbox = next((b for l, b, _ in results if l == "nivel"), None)
+    if bbox is None:
+        return None
+    x1, y1, x2, y2 = map(int, bbox)
+    region = image.crop((x1, y1, x2, y2))
+    gray = cv2.cvtColor(np.array(region), cv2.COLOR_RGB2GRAY)
+    text = pytesseract.image_to_string(gray, config="--psm 7 -c tessedit_char_whitelist=0123456789").strip()
+    return int(text) if text.isdigit() else None
 
 
 def detect_heroes(model, image: Image.Image, score_thr: float = 0.5) -> tuple[list[str], list[str]]:
