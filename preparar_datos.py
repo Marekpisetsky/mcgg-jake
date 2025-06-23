@@ -1,6 +1,5 @@
 import json
-
-from config import SINERGIAS_FIJAS
+from collections import Counter
 
 
 # Asignar un número a cada héroe
@@ -47,8 +46,7 @@ def vectorizar_partida(nombre_archivo):
 
 from config import SINERGIAS_FIJAS
 from sinergias import datos_heroes
-from preparar_datos import heroes_id
-from collections import Counter
+
 
 def vector_entrada(estado):
     oro = estado["oro"]
