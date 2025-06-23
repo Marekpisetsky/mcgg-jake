@@ -5,14 +5,21 @@ from leer_oro_automatico import detectar_oro
 from detectar_sinergias import detectar_sinergias_activas
 from detection import load_detector, detect_heroes, detect_level
 import io_backend
+import os
 
 _detector = None
+_detector_mtime = None
 
 
 def _ensure_detector():
-    global _detector
-    if _detector is None:
+    global _detector, _detector_mtime
+    try:
+        mtime = os.path.getmtime("detector.pth")
+    except OSError:
+        mtime = None
+    if _detector is None or mtime != _detector_mtime:
         _detector = load_detector("detector.pth")
+        _detector_mtime = mtime
 
 
 def leer_estado_juego():
