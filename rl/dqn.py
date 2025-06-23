@@ -17,7 +17,10 @@ class ReplayBuffer:
     def __len__(self) -> int:
         return len(self.buffer)
 
-    def push(self, transition: Tuple[List[float], int, float, List[float], bool]) -> None:
+    def push(
+        self,
+        transition: Tuple[List[float], int, float, List[float], bool],
+    ) -> None:
         self.buffer.append(transition)
 
     def sample(self, batch_size: int):
@@ -81,20 +84,30 @@ class DQNAgent:
             q_values = self.policy_net(state_t)
             return int(torch.argmax(q_values))
 
-    def remember(self, transition: Tuple[List[float], int, float, List[float], bool]) -> None:
+    def remember(
+        self, transition: Tuple[List[float], int, float, List[float], bool]
+    ) -> None:
         self.memory.push(transition)
 
     def train_step(self) -> None:
         if len(self.memory) < self.batch_size:
             return
 
-        states, actions, rewards, next_states, dones = self.memory.sample(self.batch_size)
+        states, actions, rewards, next_states, dones = self.memory.sample(
+            self.batch_size
+        )
 
-        q_values = self.policy_net(states).gather(1, actions.unsqueeze(1)).squeeze()
+        q_values = (
+            self.policy_net(states)
+            .gather(1, actions.unsqueeze(1))
+            .squeeze()
+        )
 
         with torch.no_grad():
             next_actions = self.policy_net(next_states).argmax(1)
-            next_q_values = self.target_net(next_states).gather(1, next_actions.unsqueeze(1)).squeeze()
+            next_q_values = self.target_net(next_states).gather(
+                1, next_actions.unsqueeze(1)
+            ).squeeze()
             target_q = rewards + (~dones) * self.gamma * next_q_values
 
         loss = self.loss_fn(q_values, target_q)
@@ -109,4 +122,3 @@ class DQNAgent:
         self.learn_step += 1
         if self.learn_step % self.target_update_freq == 0:
             self.target_net.load_state_dict(self.policy_net.state_dict())
-

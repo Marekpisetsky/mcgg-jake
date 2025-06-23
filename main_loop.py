@@ -7,6 +7,12 @@ import pyautogui
 from collections import Counter
 
 from detection import load_detector, is_shop_visible
+from leer_estado_juego import leer_estado_juego
+from modelo_ia import decision_ia
+from rl.dqn import DQNAgent
+from sinergias import datos_heroes
+from config import SINERGIAS_FIJAS
+
 
 _detector_acciones = None
 
@@ -15,12 +21,6 @@ def _ensure_detector():
     global _detector_acciones
     if _detector_acciones is None:
         _detector_acciones = load_detector("detector.pth")
-
-from leer_estado_juego import leer_estado_juego
-from modelo_ia import decision_ia
-from rl.dqn import DQNAgent
-from sinergias import datos_heroes
-from config import SINERGIAS_FIJAS
 
 
 def construir_vector(e):
@@ -50,7 +50,7 @@ def construir_vector(e):
 
 
 def migrar_historial(historial):
-    """Convierte el formato antiguo de historial al nuevo basado en transiciones."""
+    """Migrate legacy history to transition-based format."""
     if not historial:
         return []
     if isinstance(historial[0], dict) and "s" in historial[0]:
@@ -131,8 +131,17 @@ def main(numero_rondas=None, archivo="partida_ia.json"):
     feature_size = 2 + 3 + len(SINERGIAS_FIJAS)
     agent = DQNAgent(state_size=feature_size, action_size=2)
     for trans in historial:
-        if all(k in trans for k in ("s", "a", "r", "s_next", "done")):
-            agent.remember((trans["s"], trans["a"], trans["r"], trans["s_next"], trans["done"]))
+        required = ("s", "a", "r", "s_next", "done")
+        if all(k in trans for k in required):
+            agent.remember(
+                (
+                    trans["s"],
+                    trans["a"],
+                    trans["r"],
+                    trans["s_next"],
+                    trans["done"],
+                )
+            )
 
     while True:
         estado = leer_estado_juego()
@@ -147,12 +156,17 @@ def main(numero_rondas=None, archivo="partida_ia.json"):
             time.sleep(0.5)
 
         estado_resultante = leer_estado_juego()
-        recompensa = (estado_resultante.get("oro", 0) or 0) - (estado.get("oro", 0) or 0)
+        recompensa = (
+            (estado_resultante.get("oro", 0) or 0)
+            - (estado.get("oro", 0) or 0)
+        )
 
         siguiente_vector = construir_vector(estado_resultante)
 
         done = numero_rondas is not None and ronda_actual + 1 >= numero_rondas
-        agent.remember((estado_vector, accion_idx, recompensa, siguiente_vector, done))
+        agent.remember(
+            (estado_vector, accion_idx, recompensa, siguiente_vector, done)
+        )
         agent.train_step()
 
         registro_ronda = {
@@ -176,11 +190,21 @@ def main(numero_rondas=None, archivo="partida_ia.json"):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Bucle principal de mcgg-jake")
-    parser.add_argument("-n", "--rondas", type=int,
-                        help="Número de rondas a ejecutar (infinito si se omite)")
-    parser.add_argument("-o", "--output", default="partida_ia.json",
-                        help="Archivo JSON donde guardar el historial")
+    parser = argparse.ArgumentParser(
+        description="Bucle principal de mcgg-jake"
+    )
+    parser.add_argument(
+        "-n",
+        "--rondas",
+        type=int,
+        help="Número de rondas a ejecutar (infinito si se omite)",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        default="partida_ia.json",
+        help="Archivo JSON donde guardar el historial",
+    )
 
     args = parser.parse_args()
     main(args.rondas, args.output)
