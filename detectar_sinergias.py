@@ -32,6 +32,8 @@ def detectar_sinergias_activas():
     _ensure_detector()
     etiquetas = cargar_etiquetas()
     captura = io_backend.screenshot()
+    if captura is None:
+        return []
     resultados = detect(_detector, captura, 0.4)
     activas = []
     for label, box, score in resultados:

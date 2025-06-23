@@ -33,6 +33,8 @@ def _ensure_detector():
 def detectar_ronda():
     _ensure_detector()
     screenshot = io_backend.screenshot()
+    if screenshot is None:
+        return None
     resultados = detect(_detector, screenshot, 0.4)
     bbox = next((b for l, b, s in resultados if l == "ronda"), None)
     if bbox is None:

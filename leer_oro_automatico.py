@@ -50,6 +50,8 @@ def capturar_y_leer_oro():
     """Captura la pantalla completa y detecta la región del oro."""
     _ensure_detector()
     captura = io_backend.screenshot()
+    if captura is None:
+        return None
     resultados = detect(_detector, captura, 0.4)
     bbox = next((b for l, b, s in resultados if l == "oro"), None)
 
