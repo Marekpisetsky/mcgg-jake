@@ -7,7 +7,24 @@ from PIL import Image
 from torchvision import transforms
 import torchvision
 
+HEROES = [
+    "Layla",
+    "Zilong",
+    "Tigreal",
+    "Franco",
+    "Eudora",
+    "Saber",
+    "Bane",
+    "Freya",
+    "Karina",
+    "Akai",
+]
+
 LABELS = {1: "oro", 2: "ronda", 3: "tienda", 4: "sinergia"}
+
+# Add hero labels after the predefined ones
+for i, name in enumerate(HEROES, start=5):
+    LABELS[i] = name
 
 _transform = transforms.Compose([
     transforms.ToTensor(),
@@ -89,6 +106,28 @@ def detect(model, image: Image.Image, score_thr: float = 0.5) -> List[Tuple[str,
                 (LABELS[label.item()], box.cpu().numpy().tolist(), score.item())
             )
     return results
+
+
+def detect_heroes(model, image: Image.Image, score_thr: float = 0.5) -> tuple[list[str], list[str]]:
+    """Detect heroes in shop and bench areas.
+
+    Returns two lists: ``(tienda, banco)``.
+    Heroes are sorted from left to right in the shop and appended in order of
+    appearance for the bench.
+    """
+    results = detect(model, image, score_thr)
+    shop: list[tuple[float, str]] = []
+    bench: list[str] = []
+    for label, box, _ in results:
+        if label in HEROES:
+            x1, y1, x2, y2 = box
+            cy = (y1 + y2) / 2
+            if cy < image.height * 0.5:
+                shop.append((x1, label))
+            else:
+                bench.append(label)
+    shop.sort(key=lambda t: t[0])
+    return [l for _, l in shop], bench
 
 
 def is_shop_visible(model, image: Image.Image, score_thr: float = 0.5) -> bool:

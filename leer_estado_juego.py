@@ -3,10 +3,16 @@
 from leer_ronda_automatica import detectar_ronda as obtener_ronda
 from leer_oro_automatico import detectar_oro
 from detectar_sinergias import detectar_sinergias_activas
+from detection import load_detector, detect_heroes
+import io_backend
 
-# El código original no contemplaba la lectura de la tienda ni el banco.
-# Para evitar errores en módulos que esperan estas claves, se devolverán
-# listas vacías por defecto.
+_detector = None
+
+
+def _ensure_detector():
+    global _detector
+    if _detector is None:
+        _detector = load_detector("detector.pth")
 
 
 def leer_estado_juego():
@@ -37,11 +43,21 @@ def leer_estado_juego():
         estado["oro"] = None
         print(f"[ERROR] No se pudo leer el oro: {e}")
 
-    # Claves opcionales utilizadas por otros módulos.
-    # Se devuelven listas vacías para evitar KeyError si aún no se ha
-    # implementado la detección automática de la tienda o del banco.
-    estado.setdefault("tienda", [])
-    estado.setdefault("banco", [])
+    # Detectar héroes en tienda y banco
+    try:
+        _ensure_detector()
+        captura = io_backend.screenshot()
+        if captura is not None:
+            tienda, banco = detect_heroes(_detector, captura, 0.4)
+            estado["tienda"] = tienda
+            estado["banco"] = banco
+        else:
+            estado.setdefault("tienda", [])
+            estado.setdefault("banco", [])
+    except Exception as e:
+        estado.setdefault("tienda", [])
+        estado.setdefault("banco", [])
+        print(f"[ERROR] No se pudieron detectar tienda/banco: {e}")
 
     return estado
 
