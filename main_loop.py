@@ -3,6 +3,28 @@ import json
 import argparse
 
 import pyautogui
+from PIL import ImageStat
+
+# Región donde debería verse el botón/área de la tienda. Las coordenadas son
+# aproximadas y pueden ajustarse según la resolución utilizada.
+SHOP_BUTTON_REGION = (620, 640, 80, 80)
+
+
+def tienda_presente():
+    """Devuelve ``True`` si se detecta el botón de la tienda en pantalla."""
+    try:
+        captura = pyautogui.screenshot(region=SHOP_BUTTON_REGION)
+        brillo = ImageStat.Stat(captura.convert("L")).mean[0]
+        return brillo > 30
+    except Exception as e:
+        print(f"[ERROR] No se pudo verificar la tienda: {e}")
+        return False
+
+
+def abrir_tienda():
+    """Envía un atajo de teclado para intentar abrir la tienda."""
+    pyautogui.press("b")
+    time.sleep(0.5)
 
 from leer_estado_juego import leer_estado_juego
 from modelo_ia import decision_ia
@@ -16,6 +38,17 @@ def ejecutar_accion(accion):
     Otros formatos se ignoran mostrando un mensaje informativo.
     """
     x = y = None
+
+    if isinstance(accion, str) and accion.lower() == "abrir_tienda":
+        abrir_tienda()
+        return
+    elif isinstance(accion, str) and accion.lower().startswith("comprar"):
+        if not tienda_presente():
+            print("[!] Tienda no detectada. Intentando abrir...")
+            abrir_tienda()
+            if not tienda_presente():
+                print("[!] No se pudo abrir la tienda. Se omite la compra.")
+                return
 
     if isinstance(accion, (list, tuple)) and len(accion) >= 2:
         x, y = accion[0], accion[1]
