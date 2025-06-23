@@ -16,6 +16,7 @@ def vectorizar_partida(nombre_archivo):
 
     for ronda in datos:
         oro = ronda["oro_inicial"]
+        nivel = ronda.get("nivel", 0) or 0
         tienda = [heroes_id.get(h, 0) for h in ronda["tienda"]]
         tienda += [0] * (5 - len(tienda))  # relleno si hay menos de 5
 
@@ -30,7 +31,7 @@ def vectorizar_partida(nombre_archivo):
             if nombre in ronda_sinergias:
                 sinergias_vector[i] = ronda_sinergias[nombre]
 
-        entrada = [oro] + tienda + estrellas_vector + sinergias_vector
+        entrada = [oro, nivel] + tienda + estrellas_vector + sinergias_vector
 
         salida = []
 
@@ -49,7 +50,8 @@ from sinergias import datos_heroes
 
 
 def vector_entrada(estado):
-    oro = estado["oro"]
+    oro = estado.get("oro", 0) or 0
+    nivel = estado.get("nivel", 0) or 0
     tienda = [heroes_id.get(h, 0) for h in estado["tienda"]]
     tienda += [0] * (5 - len(tienda))  # asegurar que tenga 5 valores
 
@@ -78,4 +80,4 @@ def vector_entrada(estado):
             conteo[s] += 1
 
     vector_sinergias = list(conteo.values())
-    return [oro] + tienda + vector_estrellas + vector_sinergias
+    return [oro, nivel] + tienda + vector_estrellas + vector_sinergias

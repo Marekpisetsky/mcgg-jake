@@ -8,7 +8,7 @@ from tienda_utils import tienda_presente
 
 # Red neuronal igual a la del entrenamiento
 modelo = nn.Sequential(
-    nn.Linear(9 + len(SINERGIAS_FIJAS), 32),
+    nn.Linear(10 + len(SINERGIAS_FIJAS), 32),
     nn.ReLU(),
     nn.Linear(32, 5),
     nn.Sigmoid()
