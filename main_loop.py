@@ -6,6 +6,7 @@ import pyautogui
 
 from leer_estado_juego import leer_estado_juego
 from modelo_ia import decision_ia
+from agent import Agent
 
 
 def ejecutar_accion(accion):
@@ -43,22 +44,42 @@ def main(numero_rondas=None, archivo="partida_ia.json"):
     """
     historial = []
     ronda_actual = 0
+    # Agente de aprendizaje por refuerzo
+    agent = Agent(state_size=3, action_size=2)
 
     while True:
         estado = leer_estado_juego()
-        acciones = decision_ia(estado)
+
+        estado_vector = [
+            estado.get("oro", 0) or 0,
+            estado.get("ronda", 0) or 0,
+            len(estado.get("sinergias", [])),
+        ]
+
+        accion_idx = agent.select_action(estado_vector)
+        acciones = decision_ia(estado) if accion_idx == 1 else []
 
         for accion in acciones:
             ejecutar_accion(accion)
             time.sleep(0.5)
 
         estado_resultante = leer_estado_juego()
+        recompensa = (estado_resultante.get("oro", 0) or 0) - (estado.get("oro", 0) or 0)
+
+        siguiente_vector = [
+            estado_resultante.get("oro", 0) or 0,
+            estado_resultante.get("ronda", 0) or 0,
+            len(estado_resultante.get("sinergias", [])),
+        ]
+
+        agent.update_policy((estado_vector, accion_idx, recompensa, siguiente_vector, False))
 
         registro_ronda = {
             "ronda": estado_resultante.get("ronda"),
             "oro": estado_resultante.get("oro"),
             "sinergias": estado_resultante.get("sinergias", []),
             "acciones": acciones,
+            "recompensa": recompensa,
         }
         historial.append(registro_ronda)
 
