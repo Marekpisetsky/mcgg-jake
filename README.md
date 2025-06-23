@@ -139,6 +139,17 @@ Con el tiempo, la IA **maximiza su recompensa**.
 - `oro_observador.py`, `leer_oro_automatico.py` – Sistema de detección de oro.
 - `modelo_*.pth` – Pesos de los modelos entrenados.
 - `mcgg_jake_runner.py` – Ciclo automatizado (por integrar).
+- `detection.py` – Entrenamiento y uso del detector de objetos.
+
+## 🎯 Entrenar el detector de objetos
+
+1. Coloca tus capturas anotadas en `dataset/images` y las
+   anotaciones en `dataset/annotations.json` (formato simple).
+2. Ejecuta `python detection.py` con la función `train_detector` para
+   generar `detector.pth`.
+3. Los módulos `leer_oro_automatico.py`, `leer_ronda_automatica.py` y
+   `detectar_sinergias.py` usarán ese modelo para localizar cada
+   elemento sin depender de la resolución.
 
 ---
 

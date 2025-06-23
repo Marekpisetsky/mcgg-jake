@@ -20,6 +20,9 @@ def vectorizar_partida(nombre_archivo):
         tienda = [heroes_id.get(h, 0) for h in ronda["tienda"]]
         tienda += [0] * (5 - len(tienda))  # relleno si hay menos de 5
 
+        # Placeholder para niveles de estrellas (no disponible en datos)
+        estrellas_vector = [0, 0, 0]
+
         # Extraer sinergias (rellenar con 0 si faltan)
         sinergias_vector = [0] * len(SINERGIAS_FIJAS)
         ronda_sinergias = ronda.get("sinergias", {})
@@ -28,7 +31,7 @@ def vectorizar_partida(nombre_archivo):
             if nombre in ronda_sinergias:
                 sinergias_vector[i] = ronda_sinergias[nombre]
 
-        entrada = [oro] + tienda + sinergias_vector
+        entrada = [oro] + tienda + estrellas_vector + sinergias_vector
 
         salida = []
 
@@ -45,15 +48,30 @@ def vectorizar_partida(nombre_archivo):
 from config import SINERGIAS_FIJAS
 from sinergias import datos_heroes
 from preparar_datos import heroes_id
+from collections import Counter
 
 def vector_entrada(estado):
     oro = estado["oro"]
     tienda = [heroes_id.get(h, 0) for h in estado["tienda"]]
     tienda += [0] * (5 - len(tienda))  # asegurar que tenga 5 valores
 
+    banco = estado.get("banco", [])
+
+    # calcular niveles de estrellas
+    conteo_heroes = Counter(banco)
+    estrella1 = estrella2 = estrella3 = 0
+    for cantidad in conteo_heroes.values():
+        if cantidad >= 9:
+            estrella3 += 1
+        elif cantidad >= 3:
+            estrella2 += 1
+        else:
+            estrella1 += 1
+    vector_estrellas = [estrella1, estrella2, estrella3]
+
     # calcular sinergias del banco
     sinergias = []
-    for nombre in estado.get("banco", []):
+    for nombre in banco:
         sinergias += datos_heroes.get(nombre, [])
 
     conteo = {k: 0 for k in SINERGIAS_FIJAS}
@@ -62,4 +80,4 @@ def vector_entrada(estado):
             conteo[s] += 1
 
     vector_sinergias = list(conteo.values())
-    return [oro] + tienda + vector_sinergias
+    return [oro] + tienda + vector_estrellas + vector_sinergias

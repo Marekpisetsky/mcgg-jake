@@ -25,7 +25,7 @@ for i, salida in enumerate(salidas):
             y[i, idx] = 1
 
 modelo = nn.Sequential(
-    nn.Linear(6 + len(SINERGIAS_FIJAS), 32),
+    nn.Linear(9 + len(SINERGIAS_FIJAS), 32),
     nn.ReLU(),
     nn.Linear(32, 5),
     nn.Sigmoid()
