@@ -1,0 +1,124 @@
+[
+    {
+        "ronda": 1,
+        "oro_inicial": 8,
+        "tienda": [
+            "Layla",
+            "Zilong",
+            "Tigreal",
+            "Franco",
+            "Eudora"
+        ],
+        "acciones": [
+            "Comprar Eudora"
+        ],
+        "gano": false,
+        "oro_ganado": 5,
+        "racha_actual": 1,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1
+        }
+    },
+    {
+        "ronda": 2,
+        "oro_inicial": 13,
+        "tienda": [
+            "Layla",
+            "Franco",
+            "Bane",
+            "Zilong",
+            "Saber"
+        ],
+        "acciones": [
+            "Comprar Saber"
+        ],
+        "gano": false,
+        "oro_ganado": 7,
+        "racha_actual": 2,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1,
+            "Assassin": 1,
+            "Mecha": 1
+        }
+    },
+    {
+        "ronda": 3,
+        "oro_inicial": 17,
+        "tienda": [
+            "Eudora",
+            "Bane",
+            "Zilong",
+            "Karina",
+            "Saber"
+        ],
+        "acciones": [
+            "Comprar Saber"
+        ],
+        "gano": true,
+        "oro_ganado": 6,
+        "racha_actual": 1,
+        "tipo_racha": "victoria",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1,
+            "Assassin": 2,
+            "Mecha": 2
+        }
+    },
+    {
+        "ronda": 4,
+        "oro_inicial": 23,
+        "tienda": [
+            "Saber",
+            "Franco",
+            "Freya",
+            "Zilong",
+            "Karina"
+        ],
+        "acciones": [
+            "Comprar Karina"
+        ],
+        "gano": true,
+        "oro_ganado": 8,
+        "racha_actual": 2,
+        "tipo_racha": "victoria",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1,
+            "Assassin": 3,
+            "Mecha": 2,
+            "Elf": 1
+        }
+    },
+    {
+        "ronda": 5,
+        "oro_inicial": 30,
+        "tienda": [
+            "Karina",
+            "Saber",
+            "Eudora",
+            "Freya",
+            "Akai"
+        ],
+        "acciones": [
+            "Comprar Akai"
+        ],
+        "gano": true,
+        "oro_ganado": 9,
+        "racha_actual": 3,
+        "tipo_racha": "victoria",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1,
+            "Assassin": 3,
+            "Mecha": 2,
+            "Elf": 1,
+            "Tank": 1,
+            "Wrestler": 1
+        }
+    }
+]

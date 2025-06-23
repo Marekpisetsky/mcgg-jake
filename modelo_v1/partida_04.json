@@ -1,0 +1,139 @@
+[
+    {
+        "ronda": 1,
+        "oro_inicial": 7,
+        "tienda": [
+            "Layla",
+            "Zilong",
+            "Tigreal",
+            "Franco",
+            "Eudora"
+        ],
+        "acciones": [
+            "Comprar Layla",
+            "Comprar Zilong"
+        ],
+        "gano": true,
+        "oro_ganado": 6,
+        "racha_actual": 1,
+        "tipo_racha": "victoria",
+        "sinergias": {
+            "Marksman": 1,
+            "Fighter": 1,
+            "Dragon": 1
+        }
+    },
+    {
+        "ronda": 2,
+        "oro_inicial": 10,
+        "tienda": [
+            "Freya",
+            "Saber",
+            "Zilong",
+            "Akai",
+            "Layla"
+        ],
+        "acciones": [
+            "Comprar Freya"
+        ],
+        "gano": false,
+        "oro_ganado": 5,
+        "racha_actual": 1,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Marksman": 1,
+            "Fighter": 1,
+            "Dragon": 1,
+            "Wrestler": 1,
+            "Northern Vale": 1
+        }
+    },
+    {
+        "ronda": 3,
+        "oro_inicial": 13,
+        "tienda": [
+            "Saber",
+            "Layla",
+            "Bane",
+            "Eudora",
+            "Freya"
+        ],
+        "acciones": [
+            "Comprar Saber",
+            "Comprar Layla"
+        ],
+        "gano": false,
+        "oro_ganado": 7,
+        "racha_actual": 2,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Marksman": 2,
+            "Fighter": 1,
+            "Dragon": 1,
+            "Wrestler": 1,
+            "Northern Vale": 1,
+            "Assassin": 1,
+            "Mecha": 1
+        }
+    },
+    {
+        "ronda": 4,
+        "oro_inicial": 17,
+        "tienda": [
+            "Bane",
+            "Karina",
+            "Freya",
+            "Layla",
+            "Saber"
+        ],
+        "acciones": [
+            "Comprar Bane",
+            "Comprar Karina"
+        ],
+        "gano": false,
+        "oro_ganado": 8,
+        "racha_actual": 3,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Marksman": 2,
+            "Fighter": 2,
+            "Dragon": 1,
+            "Wrestler": 1,
+            "Northern Vale": 1,
+            "Assassin": 2,
+            "Mecha": 1,
+            "Undead": 1,
+            "Elf": 1
+        }
+    },
+    {
+        "ronda": 5,
+        "oro_inicial": 21,
+        "tienda": [
+            "Saber",
+            "Layla",
+            "Freya",
+            "Akai",
+            "Zilong"
+        ],
+        "acciones": [
+            "Comprar Saber",
+            "Comprar Layla"
+        ],
+        "gano": false,
+        "oro_ganado": 8,
+        "racha_actual": 4,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Marksman": 3,
+            "Fighter": 2,
+            "Dragon": 1,
+            "Wrestler": 1,
+            "Northern Vale": 1,
+            "Assassin": 3,
+            "Mecha": 2,
+            "Undead": 1,
+            "Elf": 1
+        }
+    }
+]

@@ -1,0 +1,136 @@
+[
+    {
+        "ronda": 1,
+        "oro_inicial": 6,
+        "tienda": [
+            "Layla",
+            "Zilong",
+            "Tigreal",
+            "Franco",
+            "Eudora"
+        ],
+        "acciones": [
+            "Comprar Layla",
+            "Comprar Zilong"
+        ],
+        "gano": false,
+        "oro_ganado": 5,
+        "racha_actual": 1,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Marksman": 1,
+            "Fighter": 1,
+            "Dragon": 1
+        }
+    },
+    {
+        "ronda": 2,
+        "oro_inicial": 11,
+        "tienda": [
+            "Zilong",
+            "Bane",
+            "Akai",
+            "Layla",
+            "Franco"
+        ],
+        "acciones": [
+            "Comprar Zilong"
+        ],
+        "gano": false,
+        "oro_ganado": 7,
+        "racha_actual": 2,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Marksman": 1,
+            "Fighter": 2,
+            "Dragon": 2
+        }
+    },
+    {
+        "ronda": 3,
+        "oro_inicial": 15,
+        "tienda": [
+            "Bane",
+            "Freya",
+            "Layla",
+            "Karina",
+            "Zilong"
+        ],
+        "acciones": [
+            "Comprar Bane",
+            "Comprar Freya"
+        ],
+        "gano": false,
+        "oro_ganado": 8,
+        "racha_actual": 3,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Marksman": 1,
+            "Fighter": 3,
+            "Dragon": 2,
+            "Undead": 1,
+            "Wrestler": 1,
+            "Northern Vale": 1
+        }
+    },
+    {
+        "ronda": 4,
+        "oro_inicial": 19,
+        "tienda": [
+            "Akai",
+            "Eudora",
+            "Saber",
+            "Layla",
+            "Karina"
+        ],
+        "acciones": [
+            "Comprar Akai",
+            "Comprar Eudora"
+        ],
+        "gano": false,
+        "oro_ganado": 8,
+        "racha_actual": 4,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Marksman": 1,
+            "Fighter": 3,
+            "Dragon": 2,
+            "Undead": 1,
+            "Wrestler": 2,
+            "Northern Vale": 1,
+            "Tank": 1,
+            "Mage": 1,
+            "Elementalist": 1
+        }
+    },
+    {
+        "ronda": 5,
+        "oro_inicial": 23,
+        "tienda": [
+            "Freya",
+            "Bane",
+            "Akai",
+            "Eudora",
+            "Karina"
+        ],
+        "acciones": [
+            "Comprar Freya",
+            "Comprar Bane"
+        ],
+        "gano": false,
+        "oro_ganado": 8,
+        "racha_actual": 5,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Marksman": 1,
+            "Fighter": 4,
+            "Dragon": 2,
+            "Undead": 2,
+            "Wrestler": 3,
+            "Northern Vale": 2,
+            "Tank": 1,
+            "Mage": 1,
+            "Elementalist": 1
+        }
+    }
+]

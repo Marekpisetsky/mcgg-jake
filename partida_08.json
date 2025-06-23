@@ -1,0 +1,126 @@
+[
+    {
+        "ronda": 1,
+        "oro_inicial": 8,
+        "tienda": [
+            "Layla",
+            "Zilong",
+            "Tigreal",
+            "Franco",
+            "Eudora"
+        ],
+        "acciones": [
+            "Comprar Eudora"
+        ],
+        "gano": false,
+        "oro_ganado": 5,
+        "racha_actual": 1,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1
+        }
+    },
+    {
+        "ronda": 2,
+        "oro_inicial": 12,
+        "tienda": [
+            "Karina",
+            "Eudora",
+            "Saber",
+            "Akai",
+            "Layla"
+        ],
+        "acciones": [
+            "Comprar Layla"
+        ],
+        "gano": true,
+        "oro_ganado": 6,
+        "racha_actual": 1,
+        "tipo_racha": "victoria",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1,
+            "Marksman": 1
+        }
+    },
+    {
+        "ronda": 3,
+        "oro_inicial": 15,
+        "tienda": [
+            "Franco",
+            "Layla",
+            "Akai",
+            "Freya",
+            "Bane"
+        ],
+        "acciones": [
+            "Comprar Bane"
+        ],
+        "gano": false,
+        "oro_ganado": 5,
+        "racha_actual": 1,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1,
+            "Marksman": 1,
+            "Fighter": 1,
+            "Undead": 1
+        }
+    },
+    {
+        "ronda": 4,
+        "oro_inicial": 20,
+        "tienda": [
+            "Karina",
+            "Zilong",
+            "Layla",
+            "Saber",
+            "Freya"
+        ],
+        "acciones": [
+            "Comprar Freya"
+        ],
+        "gano": false,
+        "oro_ganado": 7,
+        "racha_actual": 2,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1,
+            "Marksman": 1,
+            "Fighter": 1,
+            "Undead": 1,
+            "Wrestler": 1,
+            "Northern Vale": 1
+        }
+    },
+    {
+        "ronda": 5,
+        "oro_inicial": 26,
+        "tienda": [
+            "Eudora",
+            "Franco",
+            "Zilong",
+            "Akai",
+            "Bane"
+        ],
+        "acciones": [
+            "Comprar Bane"
+        ],
+        "gano": false,
+        "oro_ganado": 8,
+        "racha_actual": 3,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1,
+            "Marksman": 1,
+            "Fighter": 2,
+            "Undead": 2,
+            "Wrestler": 1,
+            "Northern Vale": 1
+        }
+    }
+]

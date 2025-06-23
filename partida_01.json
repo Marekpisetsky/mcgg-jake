@@ -1,0 +1,130 @@
+[
+    {
+        "ronda": 1,
+        "oro_inicial": 8,
+        "tienda": [
+            "Layla",
+            "Zilong",
+            "Tigreal",
+            "Franco",
+            "Eudora"
+        ],
+        "acciones": [
+            "Comprar Eudora"
+        ],
+        "gano": false,
+        "oro_ganado": 5,
+        "racha_actual": 1,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1
+        }
+    },
+    {
+        "ronda": 2,
+        "oro_inicial": 12,
+        "tienda": [
+            "Zilong",
+            "Layla",
+            "Franco",
+            "Freya",
+            "Bane"
+        ],
+        "acciones": [
+            "Comprar Bane"
+        ],
+        "gano": true,
+        "oro_ganado": 6,
+        "racha_actual": 1,
+        "tipo_racha": "victoria",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1,
+            "Fighter": 1,
+            "Undead": 1
+        }
+    },
+    {
+        "ronda": 3,
+        "oro_inicial": 18,
+        "tienda": [
+            "Akai",
+            "Zilong",
+            "Bane",
+            "Layla",
+            "Karina"
+        ],
+        "acciones": [
+            "Comprar Karina"
+        ],
+        "gano": true,
+        "oro_ganado": 8,
+        "racha_actual": 2,
+        "tipo_racha": "victoria",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1,
+            "Fighter": 1,
+            "Undead": 1,
+            "Assassin": 1,
+            "Elf": 1
+        }
+    },
+    {
+        "ronda": 4,
+        "oro_inicial": 21,
+        "tienda": [
+            "Bane",
+            "Zilong",
+            "Freya",
+            "Akai",
+            "Franco"
+        ],
+        "acciones": [
+            "Comprar Franco"
+        ],
+        "gano": false,
+        "oro_ganado": 5,
+        "racha_actual": 1,
+        "tipo_racha": "derrota",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1,
+            "Fighter": 1,
+            "Undead": 1,
+            "Assassin": 1,
+            "Elf": 1,
+            "Tank": 1,
+            "Northern Vale": 1
+        }
+    },
+    {
+        "ronda": 5,
+        "oro_inicial": 25,
+        "tienda": [
+            "Zilong",
+            "Karina",
+            "Franco",
+            "Saber",
+            "Bane"
+        ],
+        "acciones": [
+            "Comprar Bane"
+        ],
+        "gano": true,
+        "oro_ganado": 6,
+        "racha_actual": 1,
+        "tipo_racha": "victoria",
+        "sinergias": {
+            "Mage": 1,
+            "Elementalist": 1,
+            "Fighter": 2,
+            "Undead": 2,
+            "Assassin": 1,
+            "Elf": 1,
+            "Tank": 1,
+            "Northern Vale": 1
+        }
+    }
+]
