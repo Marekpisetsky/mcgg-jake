@@ -24,7 +24,8 @@ else:
 modelo.eval()
 
 def decision_ia(estado):
-    oro = estado["oro"]
+    # Usar 0 si el oro no está disponible o es None
+    oro = estado.get("oro", 0) or 0
     tienda = [heroes_id.get(h, 0) for h in estado["tienda"]]
     tienda += [0] * (5 - len(tienda))  # Rellenar si hay menos de 5
 
@@ -69,7 +70,8 @@ def decision_ia(estado):
     return decisiones
 
 def decision_ia_con_modelo(estado, modelo):
-    oro = estado["oro"]
+    # Usar 0 si el oro no está disponible o es None
+    oro = estado.get("oro", 0) or 0
     tienda = [heroes_id.get(h, 0) for h in estado["tienda"]]
     tienda += [0] * (5 - len(tienda))
 
