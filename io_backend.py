@@ -75,4 +75,33 @@ def tap(x, y):
 
 click = tap
 
-__all__ = ["screenshot", "tap", "click", "ADBError"]
+def press(key: str):
+    """Simulate a key press."""
+    if config.IO_MODE == "desktop":
+        pyautogui.press(key)
+    elif config.IO_MODE == "mobile":
+        if len(key) == 1 and key.isalpha():
+            keyevent = f"KEYCODE_{key.upper()}"
+        else:
+            keyevent = str(key)
+        try:
+            subprocess.run([
+                "adb",
+                "shell",
+                "input",
+                "keyevent",
+                keyevent,
+            ], check=True)
+        except FileNotFoundError:
+            msg = "[ADB ERROR] 'adb' command not found. Check your adb installation and connection."
+            print(msg)
+            raise ADBError(msg)
+        except subprocess.CalledProcessError:
+            msg = "[ADB ERROR] Failed to send keyevent command. Ensure a device is connected and authorized."
+            print(msg)
+            raise ADBError(msg)
+    else:
+        raise ValueError(f"Unsupported IO_MODE: {config.IO_MODE}")
+
+
+__all__ = ["screenshot", "tap", "click", "press", "ADBError"]
