@@ -1,0 +1,10 @@
+opencv-python
+pytesseract
+pyautogui
+mss
+Pillow
+torch
+joblib
+scikit-learn
+matplotlib
+pandas
