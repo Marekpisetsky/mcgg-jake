@@ -14,10 +14,6 @@ _detector = None
 
 
 def leer_oro_desde_imagen(ruta):
-    import cv2
-    import pytesseract
-    import numpy as np
-
     imagen = cv2.imread(ruta)
     
     # Aumentar tamaño
