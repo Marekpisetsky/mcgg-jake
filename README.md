@@ -142,6 +142,7 @@ Con el tiempo, la IA **maximiza su recompensa**.
 - `pyautogui`
 - `Pillow`
 - `torch` (en fase de entrenamiento)
+- Instala todas estas dependencias con `pip install -r requirements.txt`
 
 ---
 
