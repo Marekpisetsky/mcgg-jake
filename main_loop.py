@@ -4,10 +4,49 @@ import argparse
 
 import os
 import pyautogui
+from collections import Counter
+
+from detection import load_detector, is_shop_visible
+
+_detector_acciones = None
+
+
+def _ensure_detector():
+    global _detector_acciones
+    if _detector_acciones is None:
+        _detector_acciones = load_detector("detector.pth")
 
 from leer_estado_juego import leer_estado_juego
 from modelo_ia import decision_ia
 from rl.dqn import DQNAgent
+from sinergias import datos_heroes
+from config import SINERGIAS_FIJAS
+
+
+def construir_vector(e):
+    oro = e.get("oro", 0) or 0
+    ronda = e.get("ronda", 0) or 0
+    banco = e.get("banco", [])
+
+    conteo = Counter(banco)
+    estrella1 = estrella2 = estrella3 = 0
+    for cantidad in conteo.values():
+        if cantidad >= 9:
+            estrella3 += 1
+        elif cantidad >= 3:
+            estrella2 += 1
+        else:
+            estrella1 += 1
+
+    estrellas = [estrella1, estrella2, estrella3]
+
+    sinergias = []
+    for nombre in banco:
+        sinergias += datos_heroes.get(nombre, [])
+    conteo_sin = Counter(sinergias)
+    vector_sinergias = [conteo_sin.get(s, 0) for s in SINERGIAS_FIJAS]
+
+    return [oro, ronda] + estrellas + vector_sinergias
 
 
 def migrar_historial(historial):
@@ -19,18 +58,10 @@ def migrar_historial(historial):
 
     nuevo = []
     for i, ronda in enumerate(historial):
-        s_vec = [
-            ronda.get("oro", 0) or 0,
-            ronda.get("ronda", 0) or 0,
-            len(ronda.get("sinergias", [])),
-        ]
+        s_vec = construir_vector(ronda)
         if i < len(historial) - 1:
             nxt = historial[i + 1]
-            s_next = [
-                nxt.get("oro", 0) or 0,
-                nxt.get("ronda", 0) or 0,
-                len(nxt.get("sinergias", [])),
-            ]
+            s_next = construir_vector(nxt)
             done = False
         else:
             s_next = s_vec
@@ -69,8 +100,13 @@ def ejecutar_accion(accion):
             pass
 
     if x is not None and y is not None:
-        pyautogui.click(x, y)
-        print(f"[✓] Click en ({x}, {y})")
+        _ensure_detector()
+        screen = pyautogui.screenshot()
+        if is_shop_visible(_detector_acciones, screen):
+            pyautogui.click(x, y)
+            print(f"[✓] Click en ({x}, {y})")
+        else:
+            print("[!] Botón de tienda no visible, se omite el click")
     else:
         print(f"[!] Formato de acción no reconocido: {accion}")
 
@@ -92,7 +128,8 @@ def main(numero_rondas=None, archivo="partida_ia.json"):
     else:
         historial = []
     ronda_actual = len(historial)
-    agent = DQNAgent(state_size=3, action_size=2)
+    feature_size = 2 + 3 + len(SINERGIAS_FIJAS)
+    agent = DQNAgent(state_size=feature_size, action_size=2)
     for trans in historial:
         if all(k in trans for k in ("s", "a", "r", "s_next", "done")):
             agent.remember((trans["s"], trans["a"], trans["r"], trans["s_next"], trans["done"]))
@@ -100,11 +137,7 @@ def main(numero_rondas=None, archivo="partida_ia.json"):
     while True:
         estado = leer_estado_juego()
 
-        estado_vector = [
-            estado.get("oro", 0) or 0,
-            estado.get("ronda", 0) or 0,
-            len(estado.get("sinergias", [])),
-        ]
+        estado_vector = construir_vector(estado)
 
         accion_idx = agent.select_action(estado_vector)
         acciones = decision_ia(estado) if accion_idx == 1 else []
@@ -116,11 +149,7 @@ def main(numero_rondas=None, archivo="partida_ia.json"):
         estado_resultante = leer_estado_juego()
         recompensa = (estado_resultante.get("oro", 0) or 0) - (estado.get("oro", 0) or 0)
 
-        siguiente_vector = [
-            estado_resultante.get("oro", 0) or 0,
-            estado_resultante.get("ronda", 0) or 0,
-            len(estado_resultante.get("sinergias", [])),
-        ]
+        siguiente_vector = construir_vector(estado_resultante)
 
         done = numero_rondas is not None and ronda_actual + 1 >= numero_rondas
         agent.remember((estado_vector, accion_idx, recompensa, siguiente_vector, done))
