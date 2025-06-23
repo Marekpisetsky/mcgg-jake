@@ -4,6 +4,7 @@ from preparar_datos import heroes_id
 from config import SINERGIAS_FIJAS
 from collections import Counter
 from sinergias import datos_heroes
+from tienda_utils import tienda_presente
 
 # Red neuronal igual a la del entrenamiento
 modelo = nn.Sequential(
@@ -24,6 +25,8 @@ else:
 modelo.eval()
 
 def decision_ia(estado):
+    if not tienda_presente():
+        return ["abrir_tienda"]
     # Usar 0 si el oro no está disponible o es None
     oro = estado.get("oro", 0) or 0
     tienda = [heroes_id.get(h, 0) for h in estado["tienda"]]
