@@ -1,34 +1,42 @@
 # captura_pantalla.py
-import mss
-import cv2
-import numpy as np
+"""Captura de la pantalla enfocándose en la tienda y el oro."""
 
-# Áreas ajustadas para resolución 1358x704
-AREA_TIENDA = {
-    "top": 140,         # subimos el punto de inicio
-    "left": 280,
-    "width": 800,
-    "height": 360        # aumentamos el alto
-}
+import io_backend
+from detection import load_detector, detect
 
-AREA_ORO = {
-    "top": 540,
-    "left": 1165,
-    "width": 140,
-    "height": 140
-}
 
-def capturar_zona(area, nombre_archivo):
-    with mss.mss() as sct:
-        captura = sct.grab(area)
-        imagen = np.array(captura)
-        imagen = cv2.cvtColor(imagen, cv2.COLOR_BGRA2BGR)
-        cv2.imwrite(nombre_archivo, imagen)
-        print(f"[✓] {nombre_archivo} guardado.")
+_detector = None
+
+
+def _ensure_detector():
+    global _detector
+    if _detector is None:
+        _detector = load_detector("detector.pth")
+
+
+def _guardar_region(imagen, bbox, nombre):
+    if bbox is None:
+        print(f"[✘] No se encontró la región de {nombre.split('_')[1]}")
+        return
+    x1, y1, x2, y2 = map(int, bbox)
+    region = imagen.crop((x1, y1, x2, y2))
+    region.save(nombre)
+    print(f"[✓] {nombre} guardado.")
 
 def capturar_pantalla():
-    capturar_zona(AREA_TIENDA, "frame_tienda.png")
-    capturar_zona(AREA_ORO, "frame_oro.png")
+    """Captura la pantalla completa y recorta tienda y oro dinámicamente."""
+    _ensure_detector()
+    captura = io_backend.screenshot()
+    if captura is None:
+        print("[✘] No se pudo capturar la pantalla")
+        return
+    resultados = detect(_detector, captura, 0.4)
+
+    tienda_bbox = next((b for l, b, _ in resultados if l == "tienda"), None)
+    oro_bbox = next((b for l, b, _ in resultados if l == "oro"), None)
+
+    _guardar_region(captura, tienda_bbox, "frame_tienda.png")
+    _guardar_region(captura, oro_bbox, "frame_oro.png")
 
 if __name__ == "__main__":
     capturar_pantalla()
