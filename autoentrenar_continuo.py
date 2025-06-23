@@ -6,6 +6,7 @@ from entrenar_modelo import entrenar_modelo
 from simulador import simular_rondas
 from pathlib import Path
 from shutil import copyfile
+from generar_reporte import generar_reporte
 
 ARCHIVO_DATOS = "partida_simulada.json"
 BACKUP_DIR = "backups"
@@ -84,5 +85,6 @@ while True:
         os.remove(backups[0])
         backups.pop(0)
 
+    generar_reporte()
     ciclo += 1
     time.sleep(1)  # espera 1 segundo entre ciclos para evitar sobrecarga
