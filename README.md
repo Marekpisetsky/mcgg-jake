@@ -154,6 +154,9 @@ Con el tiempo, la IA **maximiza su recompensa**.
 3. Los módulos `leer_oro_automatico.py`, `leer_ronda_automatica.py`,
    `detectar_sinergias.py` y `leer_estado_juego.py` usarán ese modelo
    para localizar cada elemento sin depender de la resolución.
+4. Para habilitar el aprendizaje continuo ejecuta `python autoentrenar_detector.py`.
+   Este proceso captura nuevas imágenes etiquetadas durante las partidas y
+   reentrena periódicamente, reemplazando `detector.pth` sin intervención manual.
 
 ---
 
