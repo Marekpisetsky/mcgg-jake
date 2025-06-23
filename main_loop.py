@@ -4,6 +4,16 @@ import argparse
 
 import pyautogui
 
+from detection import load_detector, is_shop_visible
+
+
+_detector_acciones = None
+
+
+def _ensure_detector():
+    global _detector_acciones
+    if _detector_acciones is None:
+        _detector_acciones = load_detector("detector.pth")
 from leer_estado_juego import leer_estado_juego
 from modelo_ia import decision_ia
 from agent import Agent
@@ -29,8 +39,13 @@ def ejecutar_accion(accion):
             pass
 
     if x is not None and y is not None:
-        pyautogui.click(x, y)
-        print(f"[✓] Click en ({x}, {y})")
+        _ensure_detector()
+        screen = pyautogui.screenshot()
+        if is_shop_visible(_detector_acciones, screen):
+            pyautogui.click(x, y)
+            print(f"[✓] Click en ({x}, {y})")
+        else:
+            print("[!] Botón de tienda no visible, se omite el click")
     else:
         print(f"[!] Formato de acción no reconocido: {accion}")
 
