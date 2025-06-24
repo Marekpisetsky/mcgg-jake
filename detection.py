@@ -12,27 +12,45 @@ from PIL import Image
 from torchvision import transforms
 import torchvision
 
-HEROES = [
-    "Layla",
-    "Zilong",
-    "Tigreal",
-    "Franco",
-    "Eudora",
-    "Saber",
-    "Bane",
-    "Freya",
-    "Karina",
-    "Akai",
-]
-
+# Base labels that are always present
 LABELS = {1: "oro", 2: "ronda", 3: "tienda", 4: "sinergia"}
 
-# Add hero labels after the predefined ones
-for i, name in enumerate(HEROES, start=5):
-    LABELS[i] = name
-
-# Extra UI elements that can be detected
+# Additional UI elements that can be detected
 EXTRA_LABELS = ["nivel", "cofre", "item", "gogo"]
+
+
+def _load_hero_labels(annotations_file: str = "dataset/annotations.json") -> list[str]:
+    """Return hero names found in the annotations file or from ``sinergias.py``."""
+    heroes: set[str] = set()
+
+    if os.path.exists(annotations_file):
+        try:
+            with open(annotations_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            if isinstance(data, dict) and isinstance(data.get("labels"), dict):
+                for name in data["labels"].values():
+                    if name not in LABELS.values() and name not in EXTRA_LABELS:
+                        heroes.add(name)
+        except Exception:
+            pass
+
+    if not heroes:
+        try:
+            from sinergias import datos_heroes
+
+            heroes.update(datos_heroes.keys())
+        except Exception:
+            pass
+
+    return sorted(heroes)
+
+
+HEROES = _load_hero_labels()
+
+# Add hero labels after the predefined ones
+for name in HEROES:
+    LABELS[len(LABELS) + 1] = name
+
 for name in EXTRA_LABELS:
     LABELS[len(LABELS) + 1] = name
 
