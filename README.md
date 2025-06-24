@@ -29,6 +29,7 @@ La IA sigue este ciclo general:
 **¿Qué detecta la IA en cada imagen?**
 
 - Tu oro.
+- Nivel actual del jugador.
 - Cartas ofrecidas.
 - Posiciones de héroes.
 - Cofre del destino (cuando aparece).
@@ -145,8 +146,9 @@ Con el tiempo, la IA **maximiza su recompensa**.
 
 1. Coloca tus capturas anotadas en `dataset/images` y las
    anotaciones en `dataset/annotations.json` (formato simple).
-   Ahora se admiten clases adicionales para **cada héroe en tienda** y
-   **las unidades del banco**.
+   Ahora se admiten clases adicionales para **cada héroe en tienda**,
+   **las unidades del banco**, **el nivel del jugador** y objetos como
+   cofres o ítems.
 2. Ejecuta `python detection.py` con la función `train_detector` para
    generar `detector.pth` con todas estas clases.
 3. Los módulos `leer_oro_automatico.py`, `leer_ronda_automatica.py`,
