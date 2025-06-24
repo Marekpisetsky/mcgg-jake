@@ -7,6 +7,7 @@ datos_heroes = {
     "Atlas": ["Valle del Norte", "Defensor"],
     "Aurora": ["Valle del Norte", "Mago"],
     "Badang": ["Señor de Ascuas", "Golpeador"],
+    "Guinevere": ["Hadanacido", "Golpeador"],
     "Irithel": ["Juraperdición", "Tirador"],
     "Johnson": ["Eruditio", "Defensor"],
     "Kagura": ["Exorcista", "Mago"],
