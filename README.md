@@ -160,12 +160,15 @@ Con el tiempo, la IA **maximiza su recompensa**.
 5. Si deseas un ciclo totalmente autónomo (detector + agente DQN), ejecuta
    `python entrenamiento_autonomo.py`. Este script inicia el capturador y el
    bucle de entrenamiento para que el sistema juegue y aprenda sin supervisión.
+6. Si los clics no coinciden con tu dispositivo, ajusta las constantes
+   `SHOP_SLOT_COORDS` y `FIN_PARTIDA_REGION` en `config.py` según la resolución
+   de pantalla.
 
 ---
 
 ## ⚙️ REQUISITOS
 
-- Python 3.8+
+ - Python 3.10+
 - `opencv-python`
 - `pytesseract`
 - `pyautogui`

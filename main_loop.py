@@ -11,21 +11,10 @@ from leer_estado_juego import leer_estado_juego
 from preparar_datos import vector_entrada
 from rl.dqn import DQNAgent
 import tienda_utils
-from config import SINERGIAS_FIJAS
+from config import SINERGIAS_FIJAS, SHOP_SLOT_COORDS
 
 
 MODEL_PATH = "dqn_model.pth"
-
-# Approximate screen coordinates (x, y) for each hero slot in the shop.
-# These values are calibrated for an 800x360 resolution screenshot and can
-# be adjusted if a different resolution is used.
-SHOP_SLOT_COORDS = [
-    (80, 290),   # Slot 0 - leftmost hero
-    (240, 290),  # Slot 1
-    (400, 290),  # Slot 2
-    (560, 290),  # Slot 3
-    (720, 290),  # Slot 4 - rightmost hero
-]
 
 
 def _ejecutar_accion(indice: int) -> None:
