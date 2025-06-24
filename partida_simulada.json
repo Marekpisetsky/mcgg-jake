@@ -1,0 +1,26 @@
+[
+  {
+    "ronda": 1,
+    "oro_inicial": 2,
+    "nivel": 1,
+    "tienda": ["Layla", "Saber", "Franco", "Bane", "Freya"],
+    "acciones": ["Comprar Layla"],
+    "gano": true,
+    "oro_ganado": 5,
+    "racha_actual": 1,
+    "tipo_racha": "victoria",
+    "sinergias": {"Tirador": 1}
+  },
+  {
+    "ronda": 2,
+    "oro_inicial": 5,
+    "nivel": 2,
+    "tienda": ["Franco", "Bane", "Karina", "Akai", "Layla"],
+    "acciones": [],
+    "gano": false,
+    "oro_ganado": 0,
+    "racha_actual": 1,
+    "tipo_racha": "derrota",
+    "sinergias": {"Tirador": 1}
+  }
+]

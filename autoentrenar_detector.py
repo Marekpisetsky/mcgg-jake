@@ -3,14 +3,13 @@ import time
 import json
 from pathlib import Path
 
-from detection import load_detector, detect, train_detector, LABELS
+from detection import load_detector, detect, train_detector
 import io_backend
 
 DATASET_DIR = Path("dataset/images")
 ANNOTATIONS_FILE = Path("dataset/annotations.json")
 TRAIN_INTERVAL = 60 * 30  # 30 minutos
 
-LABEL_TO_ID = {v: k for k, v in LABELS.items()}
 
 
 def guardar_captura(detector):
@@ -30,7 +29,7 @@ def guardar_captura(detector):
     sample = {
         "file": filename,
         "boxes": [box for _, box, _ in results],
-        "labels": [LABEL_TO_ID[label] for label, _, _ in results],
+        "labels": [label for label, _, _ in results],
     }
 
     if ANNOTATIONS_FILE.exists():
