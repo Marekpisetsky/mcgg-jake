@@ -9,20 +9,40 @@ import io_backend
 from leer_estado_juego import leer_estado_juego
 from preparar_datos import vector_entrada
 from rl.dqn import DQNAgent
+import tienda_utils
 
 
 MODEL_PATH = "dqn_model.pth"
 
+# Approximate screen coordinates (x, y) for each hero slot in the shop.
+# These values are calibrated for an 800x360 resolution screenshot and can
+# be adjusted if a different resolution is used.
+SHOP_SLOT_COORDS = [
+    (80, 290),   # Slot 0 - leftmost hero
+    (240, 290),  # Slot 1
+    (400, 290),  # Slot 2
+    (560, 290),  # Slot 3
+    (720, 290),  # Slot 4 - rightmost hero
+]
+
 
 def _ejecutar_accion(indice: int) -> None:
-    """Placeholder to interact with the game.
+    """Tap on the corresponding hero slot in the shop."""
 
-    In a real scenario this should trigger the click/tap on the
-    corresponding hero slot. For now it simply prints the action so the
-    loop can run without an actual device.
-    """
+    if indice < 0 or indice >= len(SHOP_SLOT_COORDS):
+        print(f"[ACTION] Índice de slot inválido: {indice}")
+        return
 
-    print(f"[ACTION] Comprar en slot {indice}")
+    if not tienda_utils.tienda_presente():
+        print("[ACTION] Tienda no detectada, no se ejecutó tap")
+        return
+
+    x, y = SHOP_SLOT_COORDS[indice]
+    try:
+        io_backend.tap(x, y)
+        print(f"[ACTION] Tap en slot {indice} -> ({x}, {y})")
+    except io_backend.ADBError as exc:
+        print(f"[ADB ERROR] {exc}")
 
 
 def _calcular_recompensa(prev_state: dict, next_state: dict) -> float:
