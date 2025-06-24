@@ -168,7 +168,7 @@ Con el tiempo, la IA **maximiza su recompensa**.
 
 ## ⚙️ REQUISITOS
 
-- Python 3.8+
+ - Python 3.10+
 - `opencv-python`
 - `pytesseract`
 - `pyautogui`

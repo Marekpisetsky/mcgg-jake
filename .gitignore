@@ -1,7 +1,10 @@
 __pycache__/
 *.pyc
 .DS_Store
-# Temporary images
+# Auto-generated samples and datasets
 *.png
-# Generated JSON data
 *.json
+!sinergias.json
+oro_dataset/
+backups/
+graficas/
