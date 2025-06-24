@@ -161,6 +161,26 @@ Con el tiempo, la IA **maximiza su recompensa**.
    `python entrenamiento_autonomo.py`. Este script inicia el capturador y el
    bucle de entrenamiento para que el sistema juegue y aprenda sin supervisión.
 
+### 📝 Generar datos de ejemplo
+
+Los archivos `partida_XX.json` y `partida_simulada.json` se generan
+automáticamente al ejecutar:
+
+```bash
+python simulador.py
+```
+
+Para poblar la carpeta `oro_dataset/` con ejemplos de números de oro toma una
+captura llamada `frame_oro.png` y luego ejecuta:
+
+```bash
+python guardar_ejemplo_oro.py
+```
+
+De manera opcional puedes usar `autoetiquetar_oro.py` para etiquetar
+nuevas capturas de forma automática siempre que el modelo de reconocimiento sea
+confiable.
+
 ---
 
 ## ⚙️ REQUISITOS
