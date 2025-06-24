@@ -11,6 +11,7 @@ from leer_estado_juego import leer_estado_juego
 from preparar_datos import vector_entrada
 from rl.dqn import DQNAgent
 import tienda_utils
+from config import SINERGIAS_FIJAS
 
 
 MODEL_PATH = "dqn_model.pth"
@@ -47,11 +48,28 @@ def _ejecutar_accion(indice: int) -> None:
 
 
 def _calcular_recompensa(prev_state: dict, next_state: dict) -> float:
-    """Simple reward based on the change of gold between states."""
+    """Calculate reward considering gold, victories and synergies."""
 
     oro_prev = prev_state.get("oro", 0) or 0
     oro_next = next_state.get("oro", 0) or 0
-    return float(oro_next - oro_prev)
+    reward = float(oro_next - oro_prev)
+
+    # Victory / defeat detection
+    resultado = next_state.get("gano")
+    if resultado is True:
+        reward += 10.0
+    elif resultado is False:
+        reward -= 10.0
+
+    # Synergy progress
+    prev_sin = set(prev_state.get("sinergias", []))
+    next_sin = set(next_state.get("sinergias", []))
+    nuevas = next_sin - prev_sin
+    for sinergia in nuevas:
+        if sinergia in SINERGIAS_FIJAS:
+            reward += 1.0
+
+    return reward
 
 
 def _reiniciar_partida() -> None:
