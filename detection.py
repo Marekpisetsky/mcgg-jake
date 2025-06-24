@@ -1,5 +1,8 @@
 import json
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO)
 from typing import List, Tuple
 
 import numpy as np
@@ -31,16 +34,16 @@ def _load_hero_labels(annotations_file: str = "dataset/annotations.json") -> lis
                 for name in data["labels"].values():
                     if name not in LABELS.values() and name not in EXTRA_LABELS:
                         heroes.add(name)
-        except Exception:
-            pass
+        except Exception as exc:
+            logging.exception("Failed to load hero labels from %s", annotations_file)
 
     if not heroes:
         try:
             from sinergias import datos_heroes
 
             heroes.update(datos_heroes.keys())
-        except Exception:
-            pass
+        except Exception as exc:
+            logging.exception("Failed to import hero labels from sinergias: %s", exc)
 
     return sorted(heroes)
 

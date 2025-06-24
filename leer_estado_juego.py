@@ -6,6 +6,9 @@ from detectar_sinergias import detectar_sinergias_activas
 from detection import load_detector, detect_heroes, detect_level
 import io_backend
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 _detector = None
 _detector_mtime = None
@@ -34,21 +37,21 @@ def leer_estado_juego():
         estado["ronda"] = ronda
     except Exception as e:
         estado["ronda"] = None
-        print(f"[ERROR] No se pudo leer la ronda: {e}")
+        logging.error("[ERROR] No se pudo leer la ronda: %s", e)
 
     try:
         sinergias = detectar_sinergias_activas()
         estado["sinergias"] = sinergias
     except Exception as e:
         estado["sinergias"] = []
-        print(f"[ERROR] No se pudo leer las sinergias: {e}")
+        logging.error("[ERROR] No se pudo leer las sinergias: %s", e)
 
     try:
         oro = detectar_oro()
         estado["oro"] = oro
     except Exception as e:
         estado["oro"] = None
-        print(f"[ERROR] No se pudo leer el oro: {e}")
+        logging.error("[ERROR] No se pudo leer el oro: %s", e)
 
     # Detectar héroes en tienda y banco
     try:
@@ -68,7 +71,7 @@ def leer_estado_juego():
         estado.setdefault("tienda", [])
         estado.setdefault("banco", [])
         estado.setdefault("nivel", None)
-        print(f"[ERROR] No se pudieron detectar tienda/banco: {e}")
+        logging.error("[ERROR] No se pudieron detectar tienda/banco: %s", e)
 
     return estado
 
@@ -76,4 +79,4 @@ def leer_estado_juego():
 # Prueba directa
 if __name__ == "__main__":
     estado = leer_estado_juego()
-    print("Estado actual del juego:", estado)
+    logging.info("Estado actual del juego: %s", estado)

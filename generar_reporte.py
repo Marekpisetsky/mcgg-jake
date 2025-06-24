@@ -2,6 +2,9 @@ import os
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 def generar_reporte(archivo_datos="partida_simulada.json", winrate_log="winrate_por_ciclo.txt", salida_dir="graficas"):
@@ -21,7 +24,7 @@ def generar_reporte(archivo_datos="partida_simulada.json", winrate_log="winrate_
             plt.savefig(os.path.join(salida_dir, "winrate_trend.png"))
             plt.close()
         except Exception as e:
-            print(f"Error al generar grafico de winrate: {e}")
+            logging.error("Error al generar grafico de winrate: %s", e)
 
     # Synergy usage
     if os.path.exists(archivo_datos):
@@ -29,7 +32,7 @@ def generar_reporte(archivo_datos="partida_simulada.json", winrate_log="winrate_
             with open(archivo_datos, encoding="utf-8") as f:
                 datos = json.load(f)
         except Exception as e:
-            print(f"Error al leer {archivo_datos}: {e}")
+            logging.error("Error al leer %s: %s", archivo_datos, e)
             datos = []
 
         conteo = {}

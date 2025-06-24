@@ -3,6 +3,9 @@ import cv2
 import numpy as np
 from sklearn.neural_network import MLPRegressor
 import joblib
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 def cargar_datos_auto():
     X, y = [], []
@@ -15,7 +18,8 @@ def cargar_datos_auto():
             try:
                 label = int(archivo.split(".")[0])  # ej: 42.png -> 42
                 y.append(label)
-            except:
+            except ValueError as exc:
+                logging.warning("Invalid label in filename %s: %s", archivo, exc)
                 continue
     return np.array(X), np.array(y)
 
@@ -24,7 +28,7 @@ def entrenar():
     modelo = MLPRegressor(hidden_layer_sizes=(128,), max_iter=500)
     modelo.fit(X, y)
     joblib.dump(modelo, "modelo_oro.pkl")
-    print("[✓] Modelo actualizado")
+    logging.info("[✓] Modelo actualizado")
 
 if __name__ == "__main__":
     entrenar()

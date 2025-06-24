@@ -1,6 +1,9 @@
 import io
 import subprocess
 from PIL import Image
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 import config
 
@@ -33,10 +36,10 @@ def screenshot(region=None):
                 "-p",
             ], stdout=subprocess.PIPE, check=True)
         except FileNotFoundError:
-            print("[ADB ERROR] 'adb' command not found. Check your adb installation and connection.")
+            logging.error("[ADB ERROR] 'adb' command not found. Check your adb installation and connection.")
             return None
         except subprocess.CalledProcessError:
-            print("[ADB ERROR] Failed to capture screenshot. Ensure a device is connected and authorized.")
+            logging.error("[ADB ERROR] Failed to capture screenshot. Ensure a device is connected and authorized.")
             return None
         img = Image.open(io.BytesIO(result.stdout))
         if region:
@@ -63,11 +66,11 @@ def tap(x, y):
             ], check=True)
         except FileNotFoundError:
             msg = "[ADB ERROR] 'adb' command not found. Check your adb installation and connection."
-            print(msg)
+            logging.error(msg)
             raise ADBError(msg)
         except subprocess.CalledProcessError:
             msg = "[ADB ERROR] Failed to send tap command. Ensure a device is connected and authorized."
-            print(msg)
+            logging.error(msg)
             raise ADBError(msg)
     else:
         raise ValueError(f"Unsupported IO_MODE: {config.IO_MODE}")
@@ -94,11 +97,11 @@ def press(key: str):
             ], check=True)
         except FileNotFoundError:
             msg = "[ADB ERROR] 'adb' command not found. Check your adb installation and connection."
-            print(msg)
+            logging.error(msg)
             raise ADBError(msg)
         except subprocess.CalledProcessError:
             msg = "[ADB ERROR] Failed to send keyevent command. Ensure a device is connected and authorized."
-            print(msg)
+            logging.error(msg)
             raise ADBError(msg)
     else:
         raise ValueError(f"Unsupported IO_MODE: {config.IO_MODE}")
