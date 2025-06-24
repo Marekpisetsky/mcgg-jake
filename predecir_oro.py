@@ -1,6 +1,9 @@
 from PIL import Image
 import torch
 from torchvision import transforms
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 # Cargar el modelo entrenado una vez
 modelo = torch.load("modelo_oro.pt")
@@ -26,16 +29,16 @@ def predecir_oro(ruta_imagen):
         prediccion = salida.item()
         return int(round(prediccion)), prediccion
     except Exception as e:
-        print(f"[✗] Error al predecir oro: {e}")
+        logging.error("[✗] Error al predecir oro: %s", e)
         return -1, -1
 
 # Ejemplo de uso
 def main():
     oro, confianza = predecir_oro("frame_oro.png")
     if oro == -1:
-        print("[✗] Error al procesar la imagen.")
+        logging.error("[✗] Error al procesar la imagen.")
     else:
-        print(f"[✓] Oro detectado: {oro} (confianza: {confianza:.4f})")
+        logging.info("[✓] Oro detectado: %d (confianza: %.4f)", oro, confianza)
 
 if __name__ == "__main__":
     main()
