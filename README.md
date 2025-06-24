@@ -145,8 +145,20 @@ Con el tiempo, la IA **maximiza su recompensa**.
 ## 🎯 Entrenar el detector de objetos
 
 1. Coloca tus capturas anotadas en `dataset/images` y las
-   anotaciones en `dataset/annotations.json` (formato simple).
-   Ahora se admiten clases adicionales para **cada héroe en tienda**,
+   anotaciones en `dataset/annotations.json`.
+   Cada entrada debe tener el nombre de la imagen, las cajas y las
+   etiquetas por **nombre**:
+
+   ```json
+   {
+     "file": "ejemplo.png",
+     "boxes": [[10, 20, 60, 70]],
+     "labels": ["Layla"]
+   }
+   ```
+   El mapeo de nombres a IDs se genera automáticamente al entrenar, por lo
+   que puedes añadir nuevos héroes sin modificar el código.
+   También se admiten las clases para **cada héroe en tienda**,
    **las unidades del banco**, **el nivel del jugador** y objetos como
    cofres o ítems.
 2. Ejecuta `python detection.py` con la función `train_detector` para
