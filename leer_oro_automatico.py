@@ -13,8 +13,12 @@ _detector = None
 
 
 
-def leer_oro_desde_imagen(ruta):
-    imagen = cv2.imread(ruta)
+def leer_oro_desde_imagen(imagen_or_ruta):
+    """Return the detected gold amount from an image or image path."""
+    if isinstance(imagen_or_ruta, Image.Image):
+        imagen = cv2.cvtColor(np.array(imagen_or_ruta), cv2.COLOR_RGB2BGR)
+    else:
+        imagen = cv2.imread(imagen_or_ruta)
     
     # Aumentar tamaño
     imagen = cv2.resize(imagen, None, fx=5, fy=5, interpolation=cv2.INTER_CUBIC)
@@ -57,11 +61,8 @@ def capturar_y_leer_oro():
 
     x1, y1, x2, y2 = map(int, bbox)
     region = captura.crop((x1, y1, x2, y2))
-    ruta_imagen = "frame_oro.png"
-    region.save(ruta_imagen)
-    print("[✓] Captura guardada en:", ruta_imagen)
 
-    texto = leer_oro_desde_imagen(ruta_imagen)
+    texto = leer_oro_desde_imagen(region)
     if texto.isdigit():
         print("[✔] Oro detectado:", texto)
         return int(texto)
