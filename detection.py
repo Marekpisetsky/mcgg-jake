@@ -2,11 +2,6 @@ import json
 import os
 from typing import List, Tuple
 
-import numpy as np
-
-import cv2
-import pytesseract
-
 import torch
 from PIL import Image
 from torchvision import transforms
@@ -120,6 +115,9 @@ def detect(model, image: Image.Image, score_thr: float = 0.5) -> List[Tuple[str,
 
 def detect_level(model, image: Image.Image, score_thr: float = 0.5) -> int | None:
     """Return the detected player level using OCR on the level region."""
+    import cv2
+    import numpy as np
+    import pytesseract
     results = detect(model, image, score_thr)
     bbox = next((b for l, b, _ in results if l == "nivel"), None)
     if bbox is None:
