@@ -4,15 +4,11 @@ import pytesseract
 from typing import Tuple, Optional
 
 import io_backend
-
-# Approximate region where the 'Victory' or 'Defeat' text appears
-# Coordinates: (x, y, width, height) for an 800x360 screenshot
-FIN_PARTIDA_REGION = (250, 100, 300, 80)
+from config import FIN_PARTIDA_REGION
 
 
-def detectar_fin_partida() -> Tuple[bool, Optional[bool]]:
+def detectar_fin_partida() -> tuple[bool, bool | None]:
     """Return ``(fin, gano)`` based on OCR of the result text.
-
     ``fin`` indica si se detectó la pantalla de fin de partida.
     ``gano`` es ``True`` si se detecta una victoria, ``False`` si se detecta una
     derrota y ``None`` en caso de que no se pueda determinar.
