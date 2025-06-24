@@ -161,8 +161,9 @@ Con el tiempo, la IA **maximiza su recompensa**.
    `python entrenamiento_autonomo.py`. Este script inicia el capturador y el
    bucle de entrenamiento para que el sistema juegue y aprenda sin supervisión.
 6. Si los clics no coinciden con tu dispositivo, ajusta las constantes
-   `SHOP_SLOT_COORDS` y `FIN_PARTIDA_REGION` en `config.py` según la resolución
-   de pantalla.
+   `SHOP_SLOT_COORDS`, `FIN_PARTIDA_REGION` y `EXIT_BUTTON_REGION` en `config.py`
+   según la resolución de pantalla y la posición del botón para salir al
+   finalizar la partida.
 
 ---
 

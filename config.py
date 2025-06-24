@@ -33,3 +33,8 @@ SHOP_SLOT_COORDS = [
 
 # Región (x, y, ancho, alto) donde aparece el texto de victoria/derrota.
 FIN_PARTIDA_REGION = (250, 100, 300, 80)
+
+# Región (x, y, ancho, alto) donde aparece el icono o texto para salir
+# cuando se observa la partida tras ser eliminado. Ajustar estas
+# coordenadas si se usan resoluciones distintas.
+EXIT_BUTTON_REGION = (720, 360, 100, 80)

@@ -1,7 +1,17 @@
 import cv2
 import numpy as np
 import pytesseract
-from typing import Tuple, Optional
+from config import FIN_PARTIDA_REGION, EXIT_BUTTON_REGION
+
+
+    # El botón "Salir" puede aparecer si seguimos observando tras perder.
+    x, y, w, h = EXIT_BUTTON_REGION
+    region = captura.crop((x, y, x + w, y + h))
+    gray = cv2.cvtColor(np.array(region), cv2.COLOR_RGB2GRAY)
+    texto = pytesseract.image_to_string(gray, config="--psm 7").lower()
+    if any(p in texto for p in ("salir", "exit")):
+        # No se puede saber el resultado exacto; asumimos fin sin marcador.
+        return True, None
 
 import io_backend
 from config import FIN_PARTIDA_REGION
