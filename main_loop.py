@@ -11,21 +11,10 @@ from leer_estado_juego import leer_estado_juego
 from preparar_datos import vector_entrada
 from rl.dqn import DQNAgent
 import tienda_utils
-from config import SINERGIAS_FIJAS
+from config import SINERGIAS_FIJAS, SHOP_SLOT_COORDS
 
 
 MODEL_PATH = "dqn_model.pth"
-
-# Approximate screen coordinates (x, y) for each hero slot in the shop.
-# These values are calibrated for an 800x360 resolution screenshot and can
-# be adjusted if a different resolution is used.
-SHOP_SLOT_COORDS = [
-    (80, 290),   # Slot 0 - leftmost hero
-    (240, 290),  # Slot 1
-    (400, 290),  # Slot 2
-    (560, 290),  # Slot 3
-    (720, 290),  # Slot 4 - rightmost hero
-]
 
 
 def _ejecutar_accion(indice: int) -> None:
@@ -73,15 +62,36 @@ def _calcular_recompensa(prev_state: dict, next_state: dict) -> float:
 
 
 def _reiniciar_partida() -> None:
-    """Navigate the end-game menus and start a new match."""
+    """Navigate the end-game menus and start a new match.
+
+    Sends several key presses/taps until the shop is detected again. The
+    coordinates are approximate and may require calibration for the target
+    device.
+    """
+
     print("[INFO] Reiniciando partida...")
-    try:
-        io_backend.press("enter")
-        time.sleep(1)
-        io_backend.tap(400, 220)  # Coordinates may need adjustment
-    except io_backend.ADBError as exc:
-        print(f"[ADB ERROR] {exc}")
-    time.sleep(3)
+
+    # Cerrar la pantalla de resultados
+    for _ in range(3):
+        try:
+            io_backend.press("enter")
+            time.sleep(1.0)
+        except io_backend.ADBError as exc:
+            print(f"[ADB ERROR] {exc}")
+            break
+
+    # Intentar iniciar la siguiente partida
+    for _ in range(5):
+        try:
+            io_backend.tap(400, 220)
+        except io_backend.ADBError as exc:
+            print(f"[ADB ERROR] {exc}")
+            break
+        time.sleep(1.5)
+        if tienda_utils.tienda_presente():
+            break
+
+    time.sleep(2)
 
 
 def train_loop(
@@ -106,20 +116,18 @@ def train_loop(
     current_state = state_vec
 
     for step in range(1, total_steps + 1):
-        if detectar_fin_partida():
-            _reiniciar_partida()
-            current_state_dict = leer_estado_juego()
-            current_state = vector_entrada(current_state_dict)
-            continue
         action = agent.select_action(current_state)
         _ejecutar_accion(action)
         time.sleep(0.5)
 
         next_state_dict = leer_estado_juego()
+        fin, gano = detectar_fin_partida()
+        if fin:
+            next_state_dict["gano"] = gano
         next_state = vector_entrada(next_state_dict)
 
         reward = _calcular_recompensa(current_state_dict, next_state_dict)
-        done = False
+        done = fin
 
         agent.remember((current_state, action, reward, next_state, done))
 
@@ -130,8 +138,13 @@ def train_loop(
             torch.save(agent.policy_net.state_dict(), model_path)
             print(f"[INFO] Modelo guardado en {model_path} (paso {step})")
 
-        current_state_dict = next_state_dict
-        current_state = next_state
+        if done:
+            _reiniciar_partida()
+            current_state_dict = leer_estado_juego()
+            current_state = vector_entrada(current_state_dict)
+        else:
+            current_state_dict = next_state_dict
+            current_state = next_state
 
 
 if __name__ == "__main__":

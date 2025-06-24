@@ -157,6 +157,12 @@ Con el tiempo, la IA **maximiza su recompensa**.
 4. Para habilitar el aprendizaje continuo ejecuta `python autoentrenar_detector.py`.
    Este proceso captura nuevas imágenes etiquetadas durante las partidas y
    reentrena periódicamente, reemplazando `detector.pth` sin intervención manual.
+5. Si deseas un ciclo totalmente autónomo (detector + agente DQN), ejecuta
+   `python entrenamiento_autonomo.py`. Este script inicia el capturador y el
+   bucle de entrenamiento para que el sistema juegue y aprenda sin supervisión.
+6. Si los clics no coinciden con tu dispositivo, ajusta las constantes
+   `SHOP_SLOT_COORDS` y `FIN_PARTIDA_REGION` en `config.py` según la resolución
+   de pantalla.
 
 ---
 
@@ -181,7 +187,7 @@ Con el tiempo, la IA **maximiza su recompensa**.
 
 ## 📜 LICENCIA
 
-Este proyecto es de código abierto y experimental, compartido con fines educativos.
+Distribuido bajo la licencia MIT. Consulta el archivo `LICENSE` para más detalles.
 
 ---
 
