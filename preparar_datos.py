@@ -1,12 +1,12 @@
 import json
 from collections import Counter
 
+from sinergias import datos_heroes
 
-# Asignar un número a cada héroe
-heroes_id = {
-    "Layla": 1, "Zilong": 2, "Tigreal": 3, "Franco": 4, "Eudora": 5,
-    "Saber": 6, "Bane": 7, "Freya": 8, "Karina": 9, "Akai": 10
-}
+
+# Create the mapping ``hero -> id`` dynamically using ``sinergias.py`` so that
+# new heroes only require updating that file or the dataset.
+heroes_id = {name: idx + 1 for idx, name in enumerate(sorted(datos_heroes.keys()))}
 
 def vectorizar_partida(nombre_archivo):
     with open(nombre_archivo, encoding="utf-8") as archivo:

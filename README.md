@@ -157,7 +157,9 @@ Con el tiempo, la IA **maximiza su recompensa**.
    }
    ```
    El mapeo de nombres a IDs se genera automáticamente al entrenar, por lo
-   que puedes añadir nuevos héroes sin modificar el código.
+   que puedes añadir nuevos héroes sin modificar el código. Este mismo
+   listado se usa para vectorizar los estados en `preparar_datos.py`, así que
+   el agente de refuerzo también se adapta a nuevos héroes.
    También se admiten las clases para **cada héroe en tienda**,
    **las unidades del banco**, **el nivel del jugador** y objetos como
    cofres o ítems.
