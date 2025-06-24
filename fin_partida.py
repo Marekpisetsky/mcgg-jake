@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import pytesseract
+from typing import Tuple, Optional
 
 import io_backend
 
@@ -9,7 +10,7 @@ import io_backend
 FIN_PARTIDA_REGION = (250, 100, 300, 80)
 
 
-def detectar_fin_partida() -> tuple[bool, bool | None]:
+def detectar_fin_partida() -> Tuple[bool, Optional[bool]]:
     """Return ``(fin, gano)`` based on OCR of the result text.
 
     ``fin`` indica si se detectó la pantalla de fin de partida.

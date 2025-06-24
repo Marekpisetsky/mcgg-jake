@@ -3,7 +3,7 @@ import os
 import logging
 
 logging.basicConfig(level=logging.INFO)
-from typing import List, Tuple
+from typing import List, Tuple, Optional, Union, Set
 
 import numpy as np
 
@@ -22,9 +22,9 @@ LABELS = {1: "oro", 2: "ronda", 3: "tienda", 4: "sinergia"}
 EXTRA_LABELS = ["nivel", "cofre", "item", "gogo"]
 
 
-def _load_hero_labels(annotations_file: str = "dataset/annotations.json") -> list[str]:
+def _load_hero_labels(annotations_file: str = "dataset/annotations.json") -> List[str]:
     """Return hero names found in the annotations file or from ``sinergias.py``."""
-    heroes: set[str] = set()
+    heroes: Set[str] = set()
 
     if os.path.exists(annotations_file):
         try:
@@ -117,7 +117,7 @@ def train_detector(dataset_path: str, annotations: str, out_path: str,
     print(f"Modelo guardado en {out_path}")
 
 
-def load_detector(weights: str, device: str | torch.device = "cpu"):
+def load_detector(weights: str, device: Union[str, torch.device] = "cpu"):
     model = create_model()
     model.load_state_dict(torch.load(weights, map_location=device))
     model.to(device)
@@ -139,7 +139,7 @@ def detect(model, image: Image.Image, score_thr: float = 0.5) -> List[Tuple[str,
     return results
 
 
-def detect_level(model, image: Image.Image, score_thr: float = 0.5) -> int | None:
+def detect_level(model, image: Image.Image, score_thr: float = 0.5) -> Optional[int]:
     """Return the detected player level using OCR on the level region."""
     results = detect(model, image, score_thr)
     bbox = next((b for l, b, _ in results if l == "nivel"), None)
@@ -152,7 +152,7 @@ def detect_level(model, image: Image.Image, score_thr: float = 0.5) -> int | Non
     return int(text) if text.isdigit() else None
 
 
-def detect_heroes(model, image: Image.Image, score_thr: float = 0.5) -> tuple[list[str], list[str]]:
+def detect_heroes(model, image: Image.Image, score_thr: float = 0.5) -> Tuple[List[str], List[str]]:
     """Detect heroes in shop and bench areas.
 
     Returns two lists: ``(tienda, banco)``.
@@ -160,8 +160,8 @@ def detect_heroes(model, image: Image.Image, score_thr: float = 0.5) -> tuple[li
     appearance for the bench.
     """
     results = detect(model, image, score_thr)
-    shop: list[tuple[float, str]] = []
-    bench: list[str] = []
+    shop: List[Tuple[float, str]] = []
+    bench: List[str] = []
     for label, box, _ in results:
         if label in HEROES:
             x1, y1, x2, y2 = box
