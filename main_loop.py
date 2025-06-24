@@ -106,20 +106,18 @@ def train_loop(
     current_state = state_vec
 
     for step in range(1, total_steps + 1):
-        if detectar_fin_partida():
-            _reiniciar_partida()
-            current_state_dict = leer_estado_juego()
-            current_state = vector_entrada(current_state_dict)
-            continue
         action = agent.select_action(current_state)
         _ejecutar_accion(action)
         time.sleep(0.5)
 
         next_state_dict = leer_estado_juego()
+        fin, gano = detectar_fin_partida()
+        if fin:
+            next_state_dict["gano"] = gano
         next_state = vector_entrada(next_state_dict)
 
         reward = _calcular_recompensa(current_state_dict, next_state_dict)
-        done = False
+        done = fin
 
         agent.remember((current_state, action, reward, next_state, done))
 
@@ -130,8 +128,13 @@ def train_loop(
             torch.save(agent.policy_net.state_dict(), model_path)
             print(f"[INFO] Modelo guardado en {model_path} (paso {step})")
 
-        current_state_dict = next_state_dict
-        current_state = next_state
+        if done:
+            _reiniciar_partida()
+            current_state_dict = leer_estado_juego()
+            current_state = vector_entrada(current_state_dict)
+        else:
+            current_state_dict = next_state_dict
+            current_state = next_state
 
 
 if __name__ == "__main__":
