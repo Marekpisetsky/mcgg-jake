@@ -73,15 +73,36 @@ def _calcular_recompensa(prev_state: dict, next_state: dict) -> float:
 
 
 def _reiniciar_partida() -> None:
-    """Navigate the end-game menus and start a new match."""
+    """Navigate the end-game menus and start a new match.
+
+    Sends several key presses/taps until the shop is detected again. The
+    coordinates are approximate and may require calibration for the target
+    device.
+    """
+
     print("[INFO] Reiniciando partida...")
-    try:
-        io_backend.press("enter")
-        time.sleep(1)
-        io_backend.tap(400, 220)  # Coordinates may need adjustment
-    except io_backend.ADBError as exc:
-        print(f"[ADB ERROR] {exc}")
-    time.sleep(3)
+
+    # Cerrar la pantalla de resultados
+    for _ in range(3):
+        try:
+            io_backend.press("enter")
+            time.sleep(1.0)
+        except io_backend.ADBError as exc:
+            print(f"[ADB ERROR] {exc}")
+            break
+
+    # Intentar iniciar la siguiente partida
+    for _ in range(5):
+        try:
+            io_backend.tap(400, 220)
+        except io_backend.ADBError as exc:
+            print(f"[ADB ERROR] {exc}")
+            break
+        time.sleep(1.5)
+        if tienda_utils.tienda_presente():
+            break
+
+    time.sleep(2)
 
 
 def train_loop(
