@@ -6,6 +6,7 @@ import time
 import torch
 
 import io_backend
+from fin_partida import detectar_fin_partida
 from leer_estado_juego import leer_estado_juego
 from preparar_datos import vector_entrada
 from rl.dqn import DQNAgent
@@ -53,6 +54,18 @@ def _calcular_recompensa(prev_state: dict, next_state: dict) -> float:
     return float(oro_next - oro_prev)
 
 
+def _reiniciar_partida() -> None:
+    """Navigate the end-game menus and start a new match."""
+    print("[INFO] Reiniciando partida...")
+    try:
+        io_backend.press("enter")
+        time.sleep(1)
+        io_backend.tap(400, 220)  # Coordinates may need adjustment
+    except io_backend.ADBError as exc:
+        print(f"[ADB ERROR] {exc}")
+    time.sleep(3)
+
+
 def train_loop(
     total_steps: int = 1000,
     train_interval: int = 4,
@@ -75,6 +88,11 @@ def train_loop(
     current_state = state_vec
 
     for step in range(1, total_steps + 1):
+        if detectar_fin_partida():
+            _reiniciar_partida()
+            current_state_dict = leer_estado_juego()
+            current_state = vector_entrada(current_state_dict)
+            continue
         action = agent.select_action(current_state)
         _ejecutar_accion(action)
         time.sleep(0.5)
